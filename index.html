@@ -28,18 +28,17 @@ body{
     radial-gradient(circle at 78% 88%,rgba(180,242,106,.15),transparent 42%),
     radial-gradient(circle at 15% 92%,rgba(15,184,138,.16),transparent 42%),
     linear-gradient(160deg,#f2faf5,#ecf8f1 45%,#eefaf3);
-  animation:hueDrift 40s ease-in-out infinite alternate;
 }
-@keyframes hueDrift{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(14deg)}}
 body::before,body::after{
   content:'';position:fixed;border-radius:50%;filter:blur(100px);z-index:-1;opacity:.55;
   animation:float 26s ease-in-out infinite alternate;
+  will-change:transform;
 }
 body::before{width:620px;height:620px;top:-190px;left:-170px;background:radial-gradient(circle,var(--sys-green),var(--sys-emerald) 60%,transparent 75%);}
 body::after{width:640px;height:640px;bottom:-210px;right:-170px;background:radial-gradient(circle,var(--sys-teal),var(--sys-mint) 55%,transparent 75%);animation-delay:5s;}
 @keyframes float{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,35px) scale(1.1)}}
 @media (prefers-reduced-motion:reduce){
-  body::before,body::after{animation:none} body{animation:none}
+  body::before,body::after{animation:none}
   .login-card,.login-card img,#appScreen .card,.topbar,.btn{animation:none}
 }
 .hidden{display:none !important;}
@@ -91,8 +90,7 @@ input[type=password],input[type=text],input[type=number],select,textarea{
 }
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sys-emerald);box-shadow:inset 0 1px 3px rgba(10,74,59,.05),0 0 0 4px rgba(15,184,138,.16);}
 label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-top:10px;letter-spacing:.1px;}
-.btn{background:linear-gradient(135deg,var(--sys-emerald),var(--sys-green));background-size:180% 180%;color:#fff;border:none;padding:12px 20px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:600;margin-top:16px;width:100%;box-shadow:0 8px 22px -4px rgba(15,184,138,.5),inset 0 1px 0 rgba(255,255,255,.35);transition:.2s;animation:btnSheen 6s ease-in-out infinite;}
-@keyframes btnSheen{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.btn{background:linear-gradient(135deg,var(--sys-emerald),var(--sys-green));color:#fff;border:none;padding:12px 20px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:600;margin-top:16px;width:100%;box-shadow:0 8px 22px -4px rgba(15,184,138,.5),inset 0 1px 0 rgba(255,255,255,.35);transition:.2s;}
 .btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -4px rgba(15,184,138,.6),inset 0 1px 0 rgba(255,255,255,.4);}
 .btn:active{transform:translateY(0) scale(.98);}
 .error{color:var(--red);font-size:13px;margin-top:8px;min-height:16px;}
