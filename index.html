@@ -540,11 +540,21 @@ async function saveRecord(){
   };
   msg.textContent = 'Saving...'; msg.className='save-msg';
   try{
-    await fetch(CONFIG.SCRIPT_URL, {
+    const res = await fetch(CONFIG.SCRIPT_URL, {
       method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
       body: JSON.stringify(payload)
     });
-    msg.textContent = 'Saved successfully.'; msg.className='save-msg ok';
+    let data = null;
+    try{ data = await res.json(); }catch(e){ /* backend didn't return JSON */ }
+    if(data && data.result === 'success'){
+      msg.textContent = 'Saved successfully.'; msg.className='save-msg ok';
+    } else if(data && data.error){
+      msg.textContent = 'Save failed (backend error): ' + data.error; msg.className='save-msg err';
+    } else if(!res.ok){
+      msg.textContent = 'Save failed: server returned HTTP ' + res.status; msg.className='save-msg err';
+    } else {
+      msg.textContent = 'Save request sent, but backend response was unclear — please verify the sheet.'; msg.className='save-msg err';
+    }
   }catch(err){
     msg.textContent = 'Save failed: ' + err.message; msg.className='save-msg err';
   }
