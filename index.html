@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IPAK Performance Management System</title>
+<style>
+:root{
+  --primary:#1e3a5f; --accent:#2563eb; --bg:#f4f6f9; --card:#ffffff;
+  --text:#1f2937; --muted:#6b7280; --border:#e2e8f0;
+  --green:#16a34a; --amber:#d97706; --red:#dc2626;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;}
+body{background:var(--bg);color:var(--text);min-height:100vh;}
+.hidden{display:none !important;}
+.topbar{background:var(--primary);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;}
+.topbar h1{font-size:18px;font-weight:600;}
+.topbar button{background:rgba(255,255,255,.15);color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;}
+.container{max-width:1000px;margin:0 auto;padding:24px;}
+.card{background:var(--card);border-radius:10px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:20px;}
+/* Login */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:90vh;}
+.login-card{width:360px;text-align:center;}
+.login-card h2{margin-bottom:6px;color:var(--primary);}
+.login-card p{color:var(--muted);font-size:13px;margin-bottom:20px;}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.role-btn{padding:14px 8px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);}
+.role-btn.active{border-color:var(--accent);background:#eff6ff;color:var(--accent);}
+input[type=password],input[type=text],input[type=number],select,textarea{
+  width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-size:14px;margin-top:4px;
+}
+label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-top:10px;text-transform:uppercase;letter-spacing:.3px;}
+.btn{background:var(--accent);color:#fff;border:none;padding:11px 20px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;margin-top:16px;width:100%;}
+.btn:hover{opacity:.92;}
+.error{color:var(--red);font-size:13px;margin-top:8px;min-height:16px;}
+/* Form */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+h3.section{color:var(--primary);border-bottom:2px solid var(--border);padding-bottom:8px;margin:24px 0 12px;font-size:15px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th,td{border:1px solid var(--border);padding:8px;text-align:left;}
+th{background:#f1f5f9;font-size:11px;text-transform:uppercase;color:var(--muted);}
+td input,td select{margin:0;padding:6px;font-size:13px;}
+.rating-pill{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;color:#fff;}
+.rA{background:var(--green);} .rB{background:var(--amber);} .rC{background:var(--red);} .rN{background:#94a3b8;}
+.totals{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;}
+.total-box{background:#f1f5f9;border-radius:8px;padding:12px 18px;flex:1;min-width:150px;text-align:center;}
+.total-box .val{font-size:22px;font-weight:700;color:var(--primary);}
+.total-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;}
+/* Dashboard */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.stat{background:var(--card);border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.stat .num{font-size:26px;font-weight:700;color:var(--primary);}
+.stat .lbl{font-size:12px;color:var(--muted);}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;}
+.bar-track{flex:1;background:#eef2f7;border-radius:6px;height:16px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:6px;}
+.dash-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;}
+.dash-table th,.dash-table td{border:1px solid var(--border);padding:8px;text-align:left;}
+.dash-table th{background:#f1f5f9;}
+.save-msg{font-size:13px;margin-top:10px;min-height:16px;}
+.save-msg.ok{color:var(--green);} .save-msg.err{color:var(--red);}
+.note{font-size:12px;color:var(--muted);background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:10px;margin-bottom:16px;}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen" class="login-wrap">
+  <div class="card login-card">
+    <h2>IPAK Performance Assessment</h2>
+    <p>Select your role and enter PIN to continue</p>
+    <div class="role-grid" id="roleGrid">
+      <button class="role-btn" data-role="employee">Employee</button>
+      <button class="role-btn" data-role="manager">Manager</button>
+      <button class="role-btn" data-role="hod">HOD</button>
+      <button class="role-btn" data-role="admin">Admin</button>
+    </div>
+    <input type="password" id="pinInput" placeholder="Enter PIN" maxlength="10">
+    <button class="btn" onclick="login()">Login</button>
+    <div class="error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="appScreen" class="hidden">
+  <div class="topbar">
+    <h1 id="topTitle">IPAK PMS</h1>
+    <div>
+      <button id="dashBtn" onclick="showDashboard()" class="hidden">Dashboard</button>
+      <button id="formBtn" onclick="showForm()" class="hidden">Fill Form</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ===== FORM VIEW ===== -->
+    <div id="formView">
+      <div class="card">
+        <div class="note" id="scriptNote"></div>
+        <h3 class="section" style="margin-top:0">Employee Information</h3>
+        <div class="grid2">
+          <div><label>Employee ID</label><input id="f_EmployeeID"></div>
+          <div><label>Name</label><input id="f_Name"></div>
+          <div><label>Designation</label><input id="f_Designation"></div>
+          <div><label>Department</label><input id="f_Department"></div>
+          <div><label>Sub Department</label><input id="f_SubDepartment"></div>
+          <div><label>Grade</label><input id="f_Grade"></div>
+          <div><label>Line Manager</label><input id="f_LineManager"></div>
+          <div><label>Head of Department</label><input id="f_HOD"></div>
+          <div><label>Date of Joining</label><input type="text" id="f_DOJ" placeholder="DD-MM-YYYY"></div>
+          <div><label>Performance Rating 2024</label><input id="f_Rating2024"></div>
+        </div>
+        <button class="btn" style="width:auto;background:#64748b" onclick="loadExisting()">Load Existing Record</button>
+
+        <h3 class="section">Individual Performance Indicator (IPI) — SMART Objectives</h3>
+        <table>
+          <thead><tr><th style="width:38%">Objective</th><th>Weightage %</th><th>Achievement %</th><th>Level</th><th>Weighted Score</th></tr></thead>
+          <tbody id="objBody"></tbody>
+        </table>
+        <div class="totals">
+          <div class="total-box"><div class="val" id="ipiTotalVal">0.0</div><div class="lbl">IPI Total Score</div></div>
+          <div class="total-box"><div class="val" id="ipiRatingVal">—</div><div class="lbl">IPI Final Rating</div></div>
+        </div>
+
+        <h3 class="section">Behaviour Performance Indicator (BPI) — Competencies</h3>
+        <table>
+          <thead><tr><th>Competency</th><th style="width:160px">Rating</th></tr></thead>
+          <tbody id="compBody"></tbody>
+        </table>
+        <div class="totals">
+          <div class="total-box"><div class="val" id="bpiTotalVal">0.0</div><div class="lbl">BPI Total Score</div></div>
+          <div class="total-box"><div class="val" id="bpiRatingVal">—</div><div class="lbl">BPI Final Rating</div></div>
+          <div class="total-box"><div class="val" id="finalRatingVal">—</div><div class="lbl">Overall Final Rating</div></div>
+        </div>
+
+        <h3 class="section">Comments</h3>
+        <label id="commentsLabel">Comments</label>
+        <textarea id="f_Comments" rows="4"></textarea>
+
+        <button class="btn" onclick="saveRecord()">Save Record</button>
+        <div class="save-msg" id="saveMsg"></div>
+      </div>
+    </div>
+
+    <!-- ===== DASHBOARD VIEW ===== -->
+    <div id="dashView" class="hidden">
+      <div class="stat-row" id="statRow"></div>
+      <div class="card">
+        <h3 class="section" style="margin-top:0">Final Rating Distribution</h3>
+        <div id="ratingBars"></div>
+      </div>
+      <div class="card">
+        <h3 class="section" style="margin-top:0">All Employee Records</h3>
+        <button class="btn" style="width:auto;background:#64748b" onclick="loadDashboard()">Refresh</button>
+        <div style="overflow-x:auto">
+          <table class="dash-table" id="dashTable"></table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — edit these two things after you deploy Code.gs
+   ============================================================ */
+const CONFIG = {
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyKKuPzXgI2nma2QHejrRYC18nnTJwu2OYhrq1DRD7nENuedoZZWlX0_T-7IiuRtT2TnA/exec",
+  PINS: { employee: "1111", manager: "2222", hod: "3333", admin: "9999" }
+};
+
+const COMPETENCIES = ["Teamwork","Coaching & Development","Ownership","Humility","Integrity","Innovation"];
+const FORM_TYPE_MAP = { employee: "Employee", manager: "Manager", hod: "HOD" };
+
+let selectedRole = null;
+let currentRole = null;
+let objectives = [];
+
+/* ---------- login ---------- */
+document.getElementById('roleGrid').addEventListener('click', e=>{
+  if(e.target.classList.contains('role-btn')){
+    document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+    selectedRole = e.target.dataset.role;
+  }
+});
+
+function login(){
+  const pin = document.getElementById('pinInput').value;
+  const err = document.getElementById('loginError');
+  if(!selectedRole){ err.textContent = "Please select a role."; return; }
+  if(pin !== CONFIG.PINS[selectedRole]){ err.textContent = "Incorrect PIN."; return; }
+  err.textContent = "";
+  currentRole = selectedRole;
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appScreen').classList.remove('hidden');
+  document.getElementById('topTitle').textContent = "IPAK PMS — " + selectedRole.toUpperCase();
+  document.getElementById('commentsLabel').textContent =
+    (selectedRole==='employee' ? 'Employee Comments' : selectedRole==='manager' ? 'Line Manager Comments' : selectedRole==='hod' ? 'HOD Comments' : 'Comments');
+
+  if(currentRole === 'admin'){
+    document.getElementById('formBtn').classList.remove('hidden');
+    document.getElementById('dashBtn').classList.remove('hidden');
+    showDashboard();
+  } else {
+    buildObjectivesTable();
+    buildCompetencyTable();
+  }
+  checkScriptConfigured();
+}
+
+function logout(){
+  document.getElementById('appScreen').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('pinInput').value = '';
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
+  selectedRole = null; currentRole = null;
+}
+
+function checkScriptConfigured(){
+  const note = document.getElementById('scriptNote');
+  if(CONFIG.SCRIPT_URL.includes('PASTE_YOUR')){
+    note.textContent = "⚠ Backend not connected yet: paste your deployed Apps Script URL into CONFIG.SCRIPT_URL in this file's code. Until then, Save/Load/Dashboard won't work.";
+  } else { note.classList.add('hidden'); }
+}
+
+/* ---------- form: objectives ---------- */
+function buildObjectivesTable(){
+  objectives = Array.from({length:7}, ()=>({name:'',weight:0,achv:0,level:''}));
+  renderObjectives();
+}
+function renderObjectives(){
+  const body = document.getElementById('objBody');
+  body.innerHTML = objectives.map((o,i)=>`
+    <tr>
+      <td><input value="${o.name}" onchange="objectives[${i}].name=this.value"></td>
+      <td><input type="number" min="0" max="100" value="${o.weight}" onchange="objectives[${i}].weight=+this.value;calc()"></td>
+      <td><input type="number" min="0" max="100" value="${o.achv}" onchange="objectives[${i}].achv=+this.value;calc()"></td>
+      <td>
+        <select onchange="objectives[${i}].level=this.value;calc()">
+          <option value="">Select</option>
+          <option value="A" ${o.level==='A'?'selected':''}>A - Exceed</option>
+          <option value="B" ${o.level==='B'?'selected':''}>B - Meet</option>
+          <option value="C" ${o.level==='C'?'selected':''}>C - Below</option>
+        </select>
+      </td>
+      <td id="objScore${i}">0.0</td>
+    </tr>`).join('');
+  calc();
+}
+
+/* ---------- form: competencies ---------- */
+function buildCompetencyTable(){
+  const body = document.getElementById('compBody');
+  body.innerHTML = COMPETENCIES.map((c,i)=>`
+    <tr>
+      <td>${c}</td>
+      <td>
+        <select id="comp${i}" onchange="calc()">
+          <option value="">Select Rating</option>
+          <option value="A">A - Exceed</option>
+          <option value="B">B - Meet</option>
+          <option value="C">C - Below</option>
+        </select>
+      </td>
+    </tr>`).join('');
+  calc();
+}
+
+/* ---------- scoring ----------
+   NOTE: exact scoring thresholds weren't fully readable from your
+   original file. This uses a reasonable default: weighted % score,
+   A >= 85, B 50–84.9, C < 50. Adjust LEVEL_SCORE / thresholds below
+   to match your official policy. */
+const LEVEL_SCORE = { A: 100, B: 70, C: 40 };
+
+function calc(){
+  let ipiTotal = 0, totalWeight = 0;
+  objectives.forEach((o,i)=>{
+    const score = (o.weight/100) * o.achv;
+    document.getElementById('objScore'+i).textContent = score.toFixed(1);
+    ipiTotal += score; totalWeight += o.weight;
+  });
+  document.getElementById('ipiTotalVal').textContent = ipiTotal.toFixed(1);
+  const ipiRating = ipiTotal >= 85 ? 'A - Exceed Expectation' : ipiTotal >= 50 ? 'B - Meet Expectation' : 'C - Below Expectation';
+  document.getElementById('ipiRatingVal').innerHTML = ratingPill(ipiRating);
+
+  let bpiSum = 0, bpiCount = 0;
+  COMPETENCIES.forEach((c,i)=>{
+    const sel = document.getElementById('comp'+i);
+    if(sel && sel.value){ bpiSum += LEVEL_SCORE[sel.value]; bpiCount++; }
+  });
+  const bpiTotal = bpiCount ? bpiSum/bpiCount : 0;
+  document.getElementById('bpiTotalVal').textContent = bpiTotal.toFixed(1);
+  const bpiRating = bpiCount===0 ? '—' : bpiTotal >= 85 ? 'A - Exceed Expectation' : bpiTotal >= 50 ? 'B - Meet Expectation' : 'C - Below Expectation';
+  document.getElementById('bpiRatingVal').innerHTML = bpiCount ? ratingPill(bpiRating) : '—';
+
+  const overall = (ipiTotal*0.6 + bpiTotal*0.4);
+  const overallRating = (ipiTotal===0 && bpiTotal===0) ? '—' :
+    overall >= 85 ? 'A - Exceed Expectation' : overall >= 50 ? 'B - Meet Expectation' : 'C - Below Expectation';
+  document.getElementById('finalRatingVal').innerHTML = (ipiTotal===0 && bpiTotal===0) ? '—' : ratingPill(overallRating);
+
+  return {ipiTotal, ipiRating, bpiTotal, bpiRating, overallRating};
+}
+function ratingPill(r){
+  const cls = r.startsWith('A') ? 'rA' : r.startsWith('B') ? 'rB' : r.startsWith('C') ? 'rC' : 'rN';
+  return `<span class="rating-pill ${cls}">${r}</span>`;
+}
+
+/* ---------- save / load ---------- */
+async function saveRecord(){
+  const msg = document.getElementById('saveMsg');
+  if(CONFIG.SCRIPT_URL.includes('PASTE_YOUR')){ msg.textContent='Backend not connected — see note above.'; msg.className='save-msg err'; return; }
+  const id = document.getElementById('f_EmployeeID').value.trim();
+  if(!id){ msg.textContent='Employee ID is required.'; msg.className='save-msg err'; return; }
+  const r = calc();
+  const compRatings = COMPETENCIES.map((c,i)=>({name:c, rating: document.getElementById('comp'+i).value}));
+  const payload = {
+    FormType: FORM_TYPE_MAP[currentRole] || 'Employee',
+    EmployeeID: id,
+    Name: document.getElementById('f_Name').value,
+    Designation: document.getElementById('f_Designation').value,
+    Department: document.getElementById('f_Department').value,
+    SubDepartment: document.getElementById('f_SubDepartment').value,
+    Grade: document.getElementById('f_Grade').value,
+    LineManager: document.getElementById('f_LineManager').value,
+    HOD: document.getElementById('f_HOD').value,
+    DOJ: document.getElementById('f_DOJ').value,
+    Rating2024: document.getElementById('f_Rating2024').value,
+    ObjectivesJSON: JSON.stringify(objectives),
+    IPITotal: r.ipiTotal.toFixed(1),
+    IPIRating: r.ipiRating,
+    CompetenciesJSON: JSON.stringify(compRatings),
+    BPITotal: r.bpiTotal.toFixed(1),
+    BPIRating: r.bpiRating,
+    FinalRating: r.overallRating,
+    Comments: document.getElementById('f_Comments').value,
+    SubmittedBy: currentRole
+  };
+  msg.textContent = 'Saving...'; msg.className='save-msg';
+  try{
+    await fetch(CONFIG.SCRIPT_URL, {
+      method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify(payload)
+    });
+    msg.textContent = 'Saved successfully.'; msg.className='save-msg ok';
+  }catch(err){
+    msg.textContent = 'Save failed: ' + err.message; msg.className='save-msg err';
+  }
+}
+
+async function loadExisting(){
+  const msg = document.getElementById('saveMsg');
+  if(CONFIG.SCRIPT_URL.includes('PASTE_YOUR')){ msg.textContent='Backend not connected — see note above.'; msg.className='save-msg err'; return; }
+  const id = document.getElementById('f_EmployeeID').value.trim();
+  if(!id){ msg.textContent='Enter an Employee ID first.'; msg.className='save-msg err'; return; }
+  try{
+    const res = await fetch(`${CONFIG.SCRIPT_URL}?action=get&id=${encodeURIComponent(id)}&formType=${FORM_TYPE_MAP[currentRole]}`);
+    const data = await res.json();
+    if(!data.row){ msg.textContent='No existing record found.'; msg.className='save-msg err'; return; }
+    const row = data.row;
+    ['Name','Designation','Department','SubDepartment','Grade','LineManager','HOD','DOJ','Rating2024','Comments'].forEach(k=>{
+      document.getElementById('f_'+k).value = row[k] || '';
+    });
+    try{ objectives = JSON.parse(row.ObjectivesJSON) || objectives; }catch(e){}
+    renderObjectives();
+    try{
+      const comps = JSON.parse(row.CompetenciesJSON) || [];
+      comps.forEach((c,i)=>{ const sel=document.getElementById('comp'+i); if(sel) sel.value=c.rating||''; });
+    }catch(e){}
+    calc();
+    msg.textContent='Record loaded.'; msg.className='save-msg ok';
+  }catch(err){
+    msg.textContent='Load failed: '+err.message; msg.className='save-msg err';
+  }
+}
+
+/* ---------- dashboard (admin) ---------- */
+function showDashboard(){
+  document.getElementById('formView').classList.add('hidden');
+  document.getElementById('dashView').classList.remove('hidden');
+  loadDashboard();
+}
+function showForm(){
+  document.getElementById('dashView').classList.add('hidden');
+  document.getElementById('formView').classList.remove('hidden');
+  buildObjectivesTable(); buildCompetencyTable();
+}
+
+async function loadDashboard(){
+  if(CONFIG.SCRIPT_URL.includes('PASTE_YOUR')){
+    document.getElementById('statRow').innerHTML = '<div class="stat">Backend not connected yet — see CONFIG.SCRIPT_URL</div>';
+    return;
+  }
+  try{
+    const res = await fetch(`${CONFIG.SCRIPT_URL}?action=list`);
+    const data = await res.json();
+    const rows = data.rows || [];
+    renderStats(rows);
+    renderBars(rows);
+    renderTable(rows);
+  }catch(err){
+    document.getElementById('statRow').innerHTML = '<div class="stat">Failed to load: '+err.message+'</div>';
+  }
+}
+function renderStats(rows){
+  const employees = new Set(rows.map(r=>r.EmployeeID)).size;
+  const submitted = rows.filter(r=>r.FinalRating && r.FinalRating!=='—').length;
+  const aCount = rows.filter(r=>(r.FinalRating||'').startsWith('A')).length;
+  const cCount = rows.filter(r=>(r.FinalRating||'').startsWith('C')).length;
+  document.getElementById('statRow').innerHTML = `
+    <div class="stat"><div class="num">${employees}</div><div class="lbl">Employees</div></div>
+    <div class="stat"><div class="num">${submitted}</div><div class="lbl">Records Submitted</div></div>
+    <div class="stat"><div class="num">${aCount}</div><div class="lbl">Exceed Expectation</div></div>
+    <div class="stat"><div class="num">${cCount}</div><div class="lbl">Below Expectation</div></div>`;
+}
+function renderBars(rows){
+  const buckets = {A:0,B:0,C:0};
+  rows.forEach(r=>{ const l=(r.FinalRating||'')[0]; if(buckets[l]!==undefined) buckets[l]++; });
+  const max = Math.max(1, buckets.A, buckets.B, buckets.C);
+  const colors = {A:'var(--green)',B:'var(--amber)',C:'var(--red)'};
+  const labels = {A:'A - Exceed Expectation',B:'B - Meet Expectation',C:'C - Below Expectation'};
+  document.getElementById('ratingBars').innerHTML = ['A','B','C'].map(k=>`
+    <div class="bar-row">
+      <div style="width:170px">${labels[k]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(buckets[k]/max*100)}%;background:${colors[k]}"></div></div>
+      <div style="width:24px;text-align:right">${buckets[k]}</div>
+    </div>`).join('');
+}
+function renderTable(rows){
+  const cols = ['EmployeeID','Name','Department','FormType','IPIRating','BPIRating','FinalRating'];
+  let html = '<tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>';
+  rows.forEach(r=>{ html += '<tr>'+cols.map(c=>`<td>${r[c]||''}</td>`).join('')+'</tr>'; });
+  document.getElementById('dashTable').innerHTML = html || '<tr><td>No records yet</td></tr>';
+}
+</script>
+</body>
+</html>
