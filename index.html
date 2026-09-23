@@ -6,13 +6,13 @@
 <title>IPAK Performance Management System</title>
 <style>
 :root{
-  --sys-blue:#0A84FF; --sys-indigo:#5E5CE6; --sys-purple:#BF5AF2; --sys-pink:#FF375F; --sys-orange:#FF9F0A; --sys-teal:#40C8E0;
-  --gradient:linear-gradient(120deg,var(--sys-blue),var(--sys-indigo) 60%,var(--sys-purple));
-  --primary:#1d1d1f; --text:#1d1d1f; --muted:#6e6e73; --border:rgba(0,0,0,.08); --border-light:rgba(255,255,255,.7);
-  --glass:rgba(255,255,255,.55); --glass-strong:rgba(255,255,255,.72);
-  --green:#30B94D; --amber:#FF9F0A; --red:#FF3B30;
-  --glass-shadow:0 18px 40px -14px rgba(0,0,0,.18),0 2px 8px rgba(0,0,0,.06),
-    inset 0 1px 0 rgba(255,255,255,.85),inset 0 -1px 0 rgba(0,0,0,.03);
+  --sys-green:#1ED976; --sys-emerald:#0FB88A; --sys-teal:#20C4B8; --sys-mint:#8CF2C4; --sys-lime:#B4F26A; --sys-deep:#0A4A3B;
+  --gradient:linear-gradient(120deg,var(--sys-emerald),var(--sys-teal) 55%,var(--sys-green));
+  --primary:#0C1F17; --text:#0C1F17; --muted:#5C7568; --border:rgba(10,74,59,.1); --border-light:rgba(255,255,255,.7);
+  --glass:rgba(255,255,255,.55); --glass-strong:rgba(255,255,255,.74);
+  --green:#22C55E; --amber:#FF9F0A; --red:#FF3B30;
+  --glass-shadow:0 20px 48px -16px rgba(10,74,59,.22),0 2px 8px rgba(10,74,59,.07),
+    inset 0 1px 0 rgba(255,255,255,.85),inset 0 -1px 0 rgba(10,74,59,.03);
 }
 *{box-sizing:border-box;margin:0;padding:0;font-style:normal;
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Helvetica,Arial,Roboto,sans-serif;
@@ -23,25 +23,26 @@ html{scroll-padding-top:env(safe-area-inset-top,0px);}
 body{
   min-height:100vh;color:var(--text);position:relative;overflow-x:hidden;
   background:
-    radial-gradient(circle at 12% 18%,rgba(10,132,255,.16),transparent 42%),
-    radial-gradient(circle at 88% 12%,rgba(191,90,242,.14),transparent 40%),
-    radial-gradient(circle at 78% 88%,rgba(255,55,95,.13),transparent 42%),
-    radial-gradient(circle at 15% 92%,rgba(94,92,230,.14),transparent 42%),
-    linear-gradient(160deg,#f5f5f7,#eef0f4 45%,#f7f3f6);
+    radial-gradient(circle at 12% 18%,rgba(30,217,118,.18),transparent 42%),
+    radial-gradient(circle at 88% 12%,rgba(32,196,184,.16),transparent 40%),
+    radial-gradient(circle at 78% 88%,rgba(180,242,106,.15),transparent 42%),
+    radial-gradient(circle at 15% 92%,rgba(15,184,138,.16),transparent 42%),
+    linear-gradient(160deg,#f2faf5,#ecf8f1 45%,#eefaf3);
+  animation:hueDrift 40s ease-in-out infinite alternate;
 }
+@keyframes hueDrift{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(14deg)}}
 body::before,body::after{
-  content:'';position:fixed;border-radius:50%;filter:blur(100px);z-index:-1;opacity:.5;
+  content:'';position:fixed;border-radius:50%;filter:blur(100px);z-index:-1;opacity:.55;
   animation:float 26s ease-in-out infinite alternate;
 }
-body::before{width:620px;height:620px;top:-190px;left:-170px;background:radial-gradient(circle,var(--sys-blue),var(--sys-indigo) 60%,transparent 75%);}
-body::after{width:640px;height:640px;bottom:-210px;right:-170px;background:radial-gradient(circle,var(--sys-pink),var(--sys-orange) 55%,transparent 75%);animation-delay:5s;}
+body::before{width:620px;height:620px;top:-190px;left:-170px;background:radial-gradient(circle,var(--sys-green),var(--sys-emerald) 60%,transparent 75%);}
+body::after{width:640px;height:640px;bottom:-210px;right:-170px;background:radial-gradient(circle,var(--sys-teal),var(--sys-mint) 55%,transparent 75%);animation-delay:5s;}
 @keyframes float{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,35px) scale(1.1)}}
-@media (prefers-reduced-motion:reduce){body::before,body::after{animation:none}}
+@media (prefers-reduced-motion:reduce){
+  body::before,body::after{animation:none} body{animation:none}
+  .login-card,.login-card img,#appScreen .card,.topbar,.btn{animation:none}
+}
 .hidden{display:none !important;}
-
-.traffic-lights{display:flex;gap:7px;margin-right:4px;}
-.traffic-lights span{width:11px;height:11px;border-radius:50%;display:inline-block;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.1);}
-.tl-r{background:#FF5F57;} .tl-y{background:#FEBC2E;} .tl-g{background:#28C840;}
 
 .topbar{
   background:var(--glass-strong);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
@@ -67,25 +68,32 @@ body::after{width:640px;height:640px;bottom:-210px;right:-170px;background:radia
   content:'';position:absolute;top:0;left:6%;right:6%;height:1px;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);
 }
+#appScreen .card{animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
+#appScreen .card:nth-of-type(2){animation-delay:.06s;}
+#appScreen .card:nth-of-type(3){animation-delay:.12s;}
+.topbar{animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
 
 /* Login */
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;}
-.login-card{width:380px;text-align:center;padding:40px 32px;border-radius:26px;}
-.login-card img{height:54px;margin-bottom:12px;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,.15));}
+.login-card{width:380px;text-align:center;padding:40px 32px;border-radius:26px;animation:cardIn .7s cubic-bezier(.22,1,.36,1) both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.login-card img{height:54px;margin-bottom:12px;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(10,74,59,.18));animation:logoPop .8s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes logoPop{from{opacity:0;transform:scale(.7) rotate(-6deg)}to{opacity:1;transform:scale(1) rotate(0)}}
 .login-card h2{margin-bottom:6px;color:var(--primary);font-size:22px;font-weight:700;letter-spacing:-.02em;}
 .login-card p{color:var(--muted);font-size:13px;margin-bottom:24px;}
 .role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
 .role-btn{padding:15px 8px;border:.5px solid var(--border-light);border-radius:16px;background:rgba(255,255,255,.42);backdrop-filter:blur(10px);cursor:pointer;font-size:13px;font-weight:500;color:var(--text);transition:.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.8);}
 .role-btn:hover{background:rgba(255,255,255,.75);transform:translateY(-1px);}
-.role-btn.active{border:none;background:var(--sys-blue);color:#fff;box-shadow:0 8px 20px -4px rgba(10,132,255,.5),inset 0 1px 0 rgba(255,255,255,.4);}
+.role-btn.active{border:none;background:linear-gradient(135deg,var(--sys-emerald),var(--sys-green));color:#fff;box-shadow:0 8px 20px -4px rgba(15,184,138,.5),inset 0 1px 0 rgba(255,255,255,.4);}
 input[type=password],input[type=text],input[type=number],select,textarea{
   width:100%;padding:11px 14px;border:.5px solid var(--border);border-radius:12px;font-size:14px;margin-top:4px;
-  background:rgba(255,255,255,.55);color:var(--text);box-shadow:inset 0 1px 3px rgba(0,0,0,.05);transition:.2s;
+  background:rgba(255,255,255,.55);color:var(--text);box-shadow:inset 0 1px 3px rgba(10,74,59,.05);transition:.2s;
 }
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sys-blue);box-shadow:inset 0 1px 3px rgba(0,0,0,.05),0 0 0 4px rgba(10,132,255,.18);}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sys-emerald);box-shadow:inset 0 1px 3px rgba(10,74,59,.05),0 0 0 4px rgba(15,184,138,.16);}
 label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-top:10px;letter-spacing:.1px;}
-.btn{background:var(--sys-blue);color:#fff;border:none;padding:12px 20px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:600;margin-top:16px;width:100%;box-shadow:0 8px 20px -4px rgba(10,132,255,.45),inset 0 1px 0 rgba(255,255,255,.35);transition:.2s;}
-.btn:hover{background:#1a8cff;transform:translateY(-2px);box-shadow:0 12px 26px -4px rgba(10,132,255,.55),inset 0 1px 0 rgba(255,255,255,.4);}
+.btn{background:linear-gradient(135deg,var(--sys-emerald),var(--sys-green));background-size:180% 180%;color:#fff;border:none;padding:12px 20px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:600;margin-top:16px;width:100%;box-shadow:0 8px 22px -4px rgba(15,184,138,.5),inset 0 1px 0 rgba(255,255,255,.35);transition:.2s;animation:btnSheen 6s ease-in-out infinite;}
+@keyframes btnSheen{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -4px rgba(15,184,138,.6),inset 0 1px 0 rgba(255,255,255,.4);}
 .btn:active{transform:translateY(0) scale(.98);}
 .error{color:var(--red);font-size:13px;margin-top:8px;min-height:16px;}
 
@@ -101,13 +109,13 @@ td input,td select{margin:0;padding:7px;font-size:13px;background:rgba(255,255,2
 .rA{background:var(--green);} .rB{background:var(--amber);} .rC{background:var(--red);} .rN{background:#a1a1a6;}
 .totals{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;}
 .total-box{background:rgba(255,255,255,.42);border:.5px solid var(--border-light);border-radius:18px;padding:16px 18px;flex:1;min-width:150px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.8);}
-.total-box .val{font-size:22px;font-weight:700;color:var(--sys-blue);letter-spacing:-.02em;}
+.total-box .val{font-size:22px;font-weight:700;color:var(--sys-emerald);letter-spacing:-.02em;}
 .total-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;}
 
 /* Dashboard */
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
 .stat{background:var(--glass);backdrop-filter:blur(30px) saturate(180%);border:.5px solid var(--border-light);border-radius:20px;padding:18px;text-align:center;box-shadow:var(--glass-shadow);}
-.stat .num{font-size:26px;font-weight:700;color:var(--sys-blue);letter-spacing:-.02em;}
+.stat .num{font-size:26px;font-weight:700;color:var(--sys-emerald);letter-spacing:-.02em;}
 .stat .lbl{font-size:12px;color:var(--muted);}
 .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:13px;}
 .bar-track{flex:1;background:rgba(255,255,255,.45);border-radius:999px;height:15px;overflow:hidden;border:.5px solid var(--border);box-shadow:inset 0 1px 3px rgba(0,0,0,.08);}
@@ -145,7 +153,6 @@ td input,td select{margin:0;padding:7px;font-size:13px;background:rgba(255,255,2
 <div id="appScreen" class="hidden">
   <div class="topbar">
     <div class="topbar-left">
-      <div class="traffic-lights"><span class="tl-r"></span><span class="tl-y"></span><span class="tl-g"></span></div>
       <img src="logo.png" alt="IPAK" onerror="this.style.display='none'">
       <h1 id="topTitle">IPAK PMS</h1>
     </div>
