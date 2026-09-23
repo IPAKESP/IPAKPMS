@@ -6,60 +6,95 @@
 <title>IPAK Performance Management System</title>
 <style>
 :root{
-  --primary:#1e3a5f; --accent:#2563eb; --bg:#f4f6f9; --card:#ffffff;
-  --text:#1f2937; --muted:#6b7280; --border:#e2e8f0;
+  --g-blue:#4285F4; --g-purple:#9168C0; --g-pink:#D96570; --g-gold:#F4B400;
+  --gradient:linear-gradient(120deg,var(--g-blue),var(--g-purple) 55%,var(--g-pink));
+  --primary:#2d2a4a; --text:#26243d; --muted:#6b6684; --border:rgba(255,255,255,.5);
+  --glass:rgba(255,255,255,.5); --glass-strong:rgba(255,255,255,.7);
   --green:#16a34a; --amber:#d97706; --red:#dc2626;
 }
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;}
-body{background:var(--bg);color:var(--text);min-height:100vh;}
-.hidden{display:none !important;}
-.topbar{background:var(--primary);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;}
-.topbar h1{font-size:18px;font-weight:600;}
-.topbar button{background:rgba(255,255,255,.15);color:#fff;border:none;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;}
-.container{max-width:1000px;margin:0 auto;padding:24px;}
-.card{background:var(--card);border-radius:10px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:20px;}
-/* Login */
-.login-wrap{display:flex;align-items:center;justify-content:center;min-height:90vh;}
-.login-card{width:360px;text-align:center;}
-.login-card h2{margin-bottom:6px;color:var(--primary);}
-.login-card p{color:var(--muted);font-size:13px;margin-bottom:20px;}
-.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.role-btn{padding:14px 8px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);}
-.role-btn.active{border-color:var(--accent);background:#eff6ff;color:var(--accent);}
-input[type=password],input[type=text],input[type=number],select,textarea{
-  width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;font-size:14px;margin-top:4px;
+body{
+  min-height:100vh;color:var(--text);position:relative;overflow-x:hidden;
+  background:linear-gradient(180deg,#f4f2fb,#eef1fb 40%,#f7eef4);
 }
-label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-top:10px;text-transform:uppercase;letter-spacing:.3px;}
-.btn{background:var(--accent);color:#fff;border:none;padding:11px 20px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;margin-top:16px;width:100%;}
-.btn:hover{opacity:.92;}
+body::before,body::after{
+  content:'';position:fixed;border-radius:50%;filter:blur(70px);z-index:-1;opacity:.55;
+  animation:float 22s ease-in-out infinite alternate;
+}
+body::before{width:520px;height:520px;top:-140px;left:-120px;background:radial-gradient(circle,var(--g-blue),transparent 70%);}
+body::after{width:560px;height:560px;bottom:-160px;right:-140px;background:radial-gradient(circle,var(--g-pink),transparent 70%);animation-delay:4s;}
+@keyframes float{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,30px) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){body::before,body::after{animation:none}}
+.hidden{display:none !important;}
+
+.topbar{
+  background:var(--glass-strong);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid var(--border);color:var(--primary);padding:14px 24px;
+  display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;
+}
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.topbar-left img{height:32px;width:32px;object-fit:contain;border-radius:8px;}
+.topbar h1{font-size:17px;font-weight:700;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.topbar button{background:rgba(255,255,255,.6);border:1px solid var(--border);color:var(--primary);padding:8px 16px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600;margin-left:8px;transition:.2s;}
+.topbar button:hover{background:#fff;box-shadow:0 4px 14px rgba(80,60,160,.15);}
+
+.container{max-width:1000px;margin:0 auto;padding:24px;}
+.card{
+  background:var(--glass);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid var(--border);border-radius:20px;padding:26px;
+  box-shadow:0 8px 32px rgba(80,60,160,.12);margin-bottom:20px;
+}
+
+/* Login */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.login-card{width:380px;text-align:center;padding:34px 30px;}
+.login-card img{height:52px;margin-bottom:10px;object-fit:contain;}
+.login-card h2{margin-bottom:6px;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:22px;}
+.login-card p{color:var(--muted);font-size:13px;margin-bottom:22px;}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.role-btn{padding:14px 8px;border:1.5px solid var(--border);border-radius:14px;background:rgba(255,255,255,.5);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);transition:.2s;}
+.role-btn:hover{background:rgba(255,255,255,.8);}
+.role-btn.active{border:none;background:var(--gradient);color:#fff;box-shadow:0 6px 18px rgba(145,104,192,.4);}
+input[type=password],input[type=text],input[type=number],select,textarea{
+  width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:12px;font-size:14px;margin-top:4px;
+  background:rgba(255,255,255,.6);color:var(--text);
+}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--g-purple);outline-offset:1px;}
+label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-top:10px;letter-spacing:.2px;}
+.btn{background:var(--gradient);color:#fff;border:none;padding:12px 20px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:700;margin-top:16px;width:100%;box-shadow:0 6px 18px rgba(145,104,192,.35);transition:.2s;}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(145,104,192,.45);}
 .error{color:var(--red);font-size:13px;margin-top:8px;min-height:16px;}
+
 /* Form */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-h3.section{color:var(--primary);border-bottom:2px solid var(--border);padding-bottom:8px;margin:24px 0 12px;font-size:15px;}
+h3.section{color:var(--primary);border-bottom:2px solid var(--border);padding-bottom:8px;margin:24px 0 12px;font-size:15px;font-weight:700;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 th,td{border:1px solid var(--border);padding:8px;text-align:left;}
-th{background:#f1f5f9;font-size:11px;text-transform:uppercase;color:var(--muted);}
-td input,td select{margin:0;padding:6px;font-size:13px;}
-.rating-pill{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;color:#fff;}
+th{background:rgba(255,255,255,.5);font-size:11px;text-transform:uppercase;color:var(--muted);}
+td{background:rgba(255,255,255,.3);}
+td input,td select{margin:0;padding:6px;font-size:13px;background:rgba(255,255,255,.7);}
+.rating-pill{display:inline-block;padding:3px 12px;border-radius:999px;font-size:12px;font-weight:700;color:#fff;}
 .rA{background:var(--green);} .rB{background:var(--amber);} .rC{background:var(--red);} .rN{background:#94a3b8;}
 .totals{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;}
-.total-box{background:#f1f5f9;border-radius:8px;padding:12px 18px;flex:1;min-width:150px;text-align:center;}
-.total-box .val{font-size:22px;font-weight:700;color:var(--primary);}
+.total-box{background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:16px;padding:14px 18px;flex:1;min-width:150px;text-align:center;}
+.total-box .val{font-size:22px;font-weight:700;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .total-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;}
+
 /* Dashboard */
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-.stat{background:var(--card);border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.08);}
-.stat .num{font-size:26px;font-weight:700;color:var(--primary);}
+.stat{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:16px;text-align:center;box-shadow:0 6px 20px rgba(80,60,160,.1);}
+.stat .num{font-size:26px;font-weight:700;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .stat .lbl{font-size:12px;color:var(--muted);}
 .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;}
-.bar-track{flex:1;background:#eef2f7;border-radius:6px;height:16px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:6px;}
+.bar-track{flex:1;background:rgba(255,255,255,.5);border-radius:999px;height:16px;overflow:hidden;border:1px solid var(--border);}
+.bar-fill{height:100%;border-radius:999px;}
 .dash-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;}
 .dash-table th,.dash-table td{border:1px solid var(--border);padding:8px;text-align:left;}
-.dash-table th{background:#f1f5f9;}
+.dash-table th{background:rgba(255,255,255,.5);}
+.dash-table td{background:rgba(255,255,255,.25);}
 .save-msg{font-size:13px;margin-top:10px;min-height:16px;}
 .save-msg.ok{color:var(--green);} .save-msg.err{color:var(--red);}
-.note{font-size:12px;color:var(--muted);background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:10px;margin-bottom:16px;}
+.note{font-size:12px;color:#8a5a00;background:rgba(244,180,0,.15);border:1px solid rgba(244,180,0,.4);border-radius:12px;padding:10px 14px;margin-bottom:16px;}
 </style>
 </head>
 <body>
@@ -67,6 +102,7 @@ td input,td select{margin:0;padding:6px;font-size:13px;}
 <!-- ============ LOGIN ============ -->
 <div id="loginScreen" class="login-wrap">
   <div class="card login-card">
+    <img src="logo.png" alt="IPAK" onerror="this.style.display='none'">
     <h2>IPAK Performance Assessment</h2>
     <p>Select your role and enter PIN to continue</p>
     <div class="role-grid" id="roleGrid">
@@ -84,7 +120,10 @@ td input,td select{margin:0;padding:6px;font-size:13px;}
 <!-- ============ APP SHELL ============ -->
 <div id="appScreen" class="hidden">
   <div class="topbar">
-    <h1 id="topTitle">IPAK PMS</h1>
+    <div class="topbar-left">
+      <img src="logo.png" alt="IPAK" onerror="this.style.display='none'">
+      <h1 id="topTitle">IPAK PMS</h1>
+    </div>
     <div>
       <button id="dashBtn" onclick="showDashboard()" class="hidden">Dashboard</button>
       <button id="formBtn" onclick="showForm()" class="hidden">Fill Form</button>
