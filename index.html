@@ -164,7 +164,7 @@ td input,td select{margin:0;padding:7px;font-size:13px;background:rgba(255,255,2
         <div class="note" id="scriptNote"></div>
         <h3 class="section" style="margin-top:0">Employee Information</h3>
         <div class="grid2">
-          <div><label>Employee ID</label><input id="f_EmployeeID"></div>
+          <div><label>Employee ID</label><input id="f_EmployeeID" placeholder="Employee code likhein"><span id="empLookupStatus" style="font-size:11px;color:var(--muted);display:block;margin-top:3px;"></span></div>
           <div><label>Name</label><input id="f_Name"></div>
           <div><label>Designation</label><input id="f_Designation"></div>
           <div><label>Department</label><input id="f_Department"></div>
@@ -232,7 +232,10 @@ td input,td select{margin:0;padding:7px;font-size:13px;background:rgba(255,255,2
    ============================================================ */
 const CONFIG = {
   SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyKKuPzXgI2nma2QHejrRYC18nnTJwu2OYhrq1DRD7nENuedoZZWlX0_T-7IiuRtT2TnA/exec",
-  PINS: { employee: "1111", manager: "2222", hod: "3333", admin: "9999" }
+  PINS: { employee: "1111", manager: "2222", hod: "3333", admin: "9999" },
+  /* Published Google Sheet (Employee Information) — auto-fill source.
+     Built from your pubhtml link by swapping the ending for a CSV export. */
+  SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6Yohp4Ah0K-1lYv3regS1HWxDZLJuQ_3SAdZK99IOI68jnHCGvnPB4hI4Te7q1HDo_blJz-AT57Yb/pub?output=csv"
 };
 
 const COMPETENCIES = ["Teamwork","Coaching & Development","Ownership","Humility","Integrity","Innovation"];
@@ -241,6 +244,126 @@ const FORM_TYPE_MAP = { employee: "Employee", manager: "Manager", hod: "HOD" };
 let selectedRole = null;
 let currentRole = null;
 let objectives = [];
+
+/* ---------- employee directory (from published Google Sheet) ---------- */
+let employeeDirectory = null;      // Map: normalized employee code -> row object
+let employeeDirectoryLoading = null; // in-flight promise so we only fetch once
+
+/* Parses CSV text into an array of row objects, keyed by header. Handles
+   quoted fields (commas/newlines inside quotes) which Google's CSV export uses. */
+function parseCSV(text){
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for(let i = 0; i < text.length; i++){
+    const c = text[i], next = text[i+1];
+    if(inQuotes){
+      if(c === '"' && next === '"'){ field += '"'; i++; }
+      else if(c === '"'){ inQuotes = false; }
+      else { field += c; }
+    } else {
+      if(c === '"'){ inQuotes = true; }
+      else if(c === ','){ row.push(field); field = ''; }
+      else if(c === '\r'){ /* skip */ }
+      else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+      else { field += c; }
+    }
+  }
+  if(field.length || row.length){ row.push(field); rows.push(row); }
+  if(!rows.length) return [];
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1)
+    .filter(r => r.some(v => v.trim() !== ''))
+    .map(r => {
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = (r[i] || '').trim(); });
+      return obj;
+    });
+}
+
+/* Normalizes a header/field name for loose matching: "Employee Code",
+   "employee_id", "EMP-ID" all become "employeeid" / "employeecode" etc. */
+function normKey(s){ return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+
+/* Maps our internal form field names to the possible header spellings
+   your sheet might use. First match wins, in order. */
+const SHEET_FIELD_ALIASES = {
+  EmployeeID:    ['employeeid','employeecode','empid','empcode','id','code','staffid','staffcode'],
+  Name:          ['name','employeename','fullname'],
+  Designation:   ['designation','jobtitle','title','position'],
+  Department:    ['department','dept'],
+  SubDepartment: ['subdepartment','sub_department','section','subdept'],
+  Grade:         ['grade','jobgrade'],
+  LineManager:   ['linemanager','manager','reportingmanager','lm'],
+  HOD:           ['hod','headofdepartment','headofdept'],
+  DOJ:           ['doj','dateofjoining','joiningdate'],
+  Rating2024:    ['rating2024','performancerating2024','rating']
+};
+
+function buildFieldMap(headers){
+  const normed = headers.map(h => ({ raw: h, norm: normKey(h) }));
+  const map = {};
+  Object.keys(SHEET_FIELD_ALIASES).forEach(key => {
+    const aliases = SHEET_FIELD_ALIASES[key];
+    const found = normed.find(h => aliases.includes(h.norm));
+    if(found) map[key] = found.raw;
+  });
+  return map;
+}
+
+async function loadEmployeeDirectory(){
+  if(employeeDirectory) return employeeDirectory;
+  if(employeeDirectoryLoading) return employeeDirectoryLoading;
+  employeeDirectoryLoading = (async () => {
+    const res = await fetch(CONFIG.SHEET_CSV_URL);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const rawRows = parseCSV(text);
+    if(!rawRows.length) throw new Error('Sheet empty ya format samajh nahi aaya');
+    const headers = Object.keys(rawRows[0]);
+    const fieldMap = buildFieldMap(headers);
+    if(!fieldMap.EmployeeID) throw new Error('Sheet mein Employee ID/Code column nahi mila');
+    const dir = new Map();
+    rawRows.forEach(r => {
+      const code = normKey(r[fieldMap.EmployeeID]);
+      if(!code) return;
+      dir.set(code, { raw: r, fieldMap });
+    });
+    employeeDirectory = dir;
+    return dir;
+  })();
+  return employeeDirectoryLoading;
+}
+
+/* Looks up the typed employee code and fills matching form fields. */
+async function autoFillEmployeeInfo(){
+  const status = document.getElementById('empLookupStatus');
+  const codeInput = document.getElementById('f_EmployeeID');
+  if(!codeInput) return;
+  const code = codeInput.value.trim();
+  if(!code){ status.textContent = ''; return; }
+  status.textContent = 'Employee dhoondh raha hoon...';
+  status.style.color = 'var(--muted)';
+  try{
+    const dir = await loadEmployeeDirectory();
+    const entry = dir.get(normKey(code));
+    if(!entry){
+      status.textContent = 'Yeh Employee Code sheet mein nahi mila.';
+      status.style.color = 'var(--red)';
+      return;
+    }
+    const { raw, fieldMap } = entry;
+    ['Name','Designation','Department','SubDepartment','Grade','LineManager','HOD','DOJ','Rating2024'].forEach(key => {
+      const header = fieldMap[key];
+      const el = document.getElementById('f_' + key);
+      if(el && header && raw[header]) el.value = raw[header];
+    });
+    status.textContent = 'Employee information load ho gayi ✓';
+    status.style.color = 'var(--green)';
+  }catch(err){
+    status.textContent = 'Load nahi ho saka: ' + err.message;
+    status.style.color = 'var(--red)';
+  }
+}
 
 /* ---------- login ---------- */
 document.getElementById('roleGrid').addEventListener('click', e=>{
@@ -273,6 +396,18 @@ function login(){
     buildCompetencyTable();
   }
   checkScriptConfigured();
+  wireEmployeeIDAutoFill();
+}
+
+/* Runs auto-fill when the Employee ID field loses focus or Enter is pressed. */
+function wireEmployeeIDAutoFill(){
+  const input = document.getElementById('f_EmployeeID');
+  if(!input || input.dataset.wired) return;
+  input.dataset.wired = '1';
+  input.addEventListener('blur', autoFillEmployeeInfo);
+  input.addEventListener('keydown', e => {
+    if(e.key === 'Enter'){ e.preventDefault(); autoFillEmployeeInfo(); }
+  });
 }
 
 function logout(){
