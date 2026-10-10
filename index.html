@@ -1,654 +1,783 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IPAK Performance Management System</title>
-<style>
-:root{
-  --sys-green:#1ED976; --sys-emerald:#0FB88A; --sys-teal:#20C4B8; --sys-mint:#8CF2C4; --sys-lime:#B4F26A; --sys-deep:#0A4A3B;
-  --gradient:linear-gradient(120deg,var(--sys-emerald),var(--sys-teal) 55%,var(--sys-green));
-  --primary:#0C1F17; --text:#0C1F17; --muted:#5C7568; --border:rgba(10,74,59,.1); --border-light:rgba(255,255,255,.7);
-  --glass:rgba(255,255,255,.55); --glass-strong:rgba(255,255,255,.74);
-  --green:#22C55E; --amber:#FF9F0A; --red:#FF3B30;
-  --glass-shadow:0 20px 48px -16px rgba(10,74,59,.22),0 2px 8px rgba(10,74,59,.07),
-    inset 0 1px 0 rgba(255,255,255,.85),inset 0 -1px 0 rgba(10,74,59,.03);
+<title>IPAK PMS 2025 – Performance Assessment</title>
+<style>:root{
+  --g1:#1f5b3a;--g2:#2f8f5b;--g3:#34b27b;--g4:#e6f4ec;
+  --bg:#f4f6f5;--card:#fff;--ink:#1d2a24;--mute:#66756d;--line:#dbe3de;
+  --A:#548235;--B:#a9d18e;--C:#f8cbad;--blue:#aec6e8;
+  --warn:#b45309;--err:#b42318;--ok:#067647;
 }
-*{box-sizing:border-box;margin:0;padding:0;font-style:normal;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Helvetica,Arial,Roboto,sans-serif;
-  -webkit-font-smoothing:antialiased;letter-spacing:-.01em;
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme=light]){--bg:#101613;--card:#18211c;--ink:#e8efe9;--mute:#9bb0a3;--line:#2a3830;--g4:#1c2b23}
 }
-h1,h2,h3,h4,h5,h6{font-style:normal !important;}
-html{scroll-padding-top:env(safe-area-inset-top,0px);}
-body{
-  min-height:100vh;color:var(--text);position:relative;overflow-x:hidden;
-  background:
-    radial-gradient(circle at 12% 18%,rgba(30,217,118,.18),transparent 42%),
-    radial-gradient(circle at 88% 12%,rgba(32,196,184,.16),transparent 40%),
-    radial-gradient(circle at 78% 88%,rgba(180,242,106,.15),transparent 42%),
-    radial-gradient(circle at 15% 92%,rgba(15,184,138,.16),transparent 42%),
-    linear-gradient(160deg,#f2faf5,#ecf8f1 45%,#eefaf3);
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font:14px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--g2)}
+.top{background:linear-gradient(90deg,var(--g1),var(--g2));color:#fff;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px #0002}
+.top-in{max-width:1280px;margin:auto;display:flex;align-items:center;gap:14px;padding:10px 16px;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:.5px;font-size:17px}
+.brand small{display:block;font-weight:400;font-size:11px;opacity:.85;letter-spacing:0}
+nav{display:flex;gap:2px;flex-wrap:wrap;flex:1}
+nav a{color:#fff;text-decoration:none;padding:7px 12px;border-radius:8px;opacity:.88}
+nav a:hover{background:#ffffff22}
+nav a.on{background:#ffffff33;opacity:1;font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#ffffff26;border-radius:99px;padding:4px 11px;font-size:12px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#9aa;display:inline-block}
+.dot.ok{background:#4ade80}.dot.warn{background:#fbbf24}.dot.err{background:#f87171}
+main{max-width:1280px;margin:18px auto;padding:0 16px 60px}
+h1{font-size:22px;margin:4px 0 14px}h2{font-size:16px;margin:0 0 10px}h3{font-size:14px;margin:0 0 6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}.g4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi b{display:block;font-size:26px;line-height:1.1}.kpi span{color:var(--mute);font-size:12px}
+.btn{border:1px solid var(--line);background:var(--card);padding:7px 13px;border-radius:9px;cursor:pointer}
+.btn:hover{border-color:var(--g2)}
+.btn.p{background:var(--g2);border-color:var(--g2);color:#fff}.btn.p:hover{background:var(--g1)}
+.btn.d{background:var(--err);border-color:var(--err);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:3px 9px;font-size:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.sp{flex:1}
+input,select,textarea{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 9px;width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--g3);outline-offset:-1px}
+input[readonly],textarea[readonly],input:disabled,select:disabled,textarea:disabled{background:transparent;border-color:transparent;color:var(--ink);-webkit-text-fill-color:var(--ink);opacity:1}
+textarea{resize:vertical;min-height:60px}
+label.f{display:block;font-size:12px;color:var(--mute);margin-bottom:3px}
+table{border-collapse:collapse;width:100%}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:12px;color:var(--mute);font-weight:600;background:var(--g4);position:sticky;top:0}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--g4)}
+.tw{overflow-x:auto;max-height:70vh}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.lA{background:#dcefd0;color:#2d5016}.lB{background:#e0ecf9;color:#1e3a5f}.lC{background:#fde2cf;color:#8a3b0b}.l0{background:#eee;color:#666}
+.s-draft{background:#eee;color:#555}.s-lm{background:#fff3cd;color:#7a5b00}.s-hod{background:#dbeafe;color:#1e40af}.s-final{background:#d1fae5;color:#065f46}
+.nine{display:grid;grid-template-columns:34px repeat(3,1fr);gap:6px;max-width:560px}
+.nine .ax{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mute);writing-mode:vertical-rl;transform:rotate(180deg)}
+.nine .axh{text-align:center;font-size:11px;color:var(--mute)}
+.box{border-radius:10px;padding:8px;min-height:92px;color:#111;cursor:pointer;position:relative;border:2px solid transparent}
+.box:hover{border-color:var(--g1)}
+.box b{font-size:16px}.box small{display:block;font-size:11px;opacity:.85}
+.box .n{font-size:24px;font-weight:800;margin-top:2px}
+.box.dk{color:#fff}
+.bA{background:var(--A)}.bB{background:var(--B)}.bC{background:var(--C)}.bX{background:var(--blue)}
+.star{position:absolute;right:8px;top:6px;font-size:20px}
+.msg{padding:9px 12px;border-radius:9px;margin:6px 0;font-size:13px}
+.msg.err{background:#fee4e2;color:#7a271a}.msg.warn{background:#fef0c7;color:#7a4b00}.msg.ok{background:#d1fadf;color:#05603a}.msg.info{background:var(--g4)}
+/* form */
+.form h2.sec{background:var(--g1);color:#fff;padding:7px 12px;border-radius:8px;margin:18px 0 8px;font-size:14px;letter-spacing:.4px}
+.form .info{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px 18px}
+.form .info div{display:flex;gap:8px;border-bottom:1px dashed var(--line);padding:3px 0}.form .info span{color:var(--mute);min-width:130px}
+.obj td{padding:5px}.obj input{padding:5px 6px}
+.obj .crit input{min-width:74px;font-size:12px}
+.obj .num{width:78px}
+.comp{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden}
+.comp>.hd{display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--g4)}
+.comp .t{flex:1;white-space:pre-line;font-size:13px}
+.comp .t b{font-size:13px}
+.comp details{padding:0 10px 8px}.comp summary{cursor:pointer;color:var(--g2);padding:6px 0;font-size:12px}
+.comp .ind{display:grid;grid-template-columns:1fr 1fr;gap:12px;white-space:pre-line;font-size:12px;color:var(--mute)}
+.comp select{width:190px}
+.mini{display:grid;grid-template-columns:90px repeat(3,70px);gap:4px;font-size:11px;text-align:center}
+.mini div{padding:8px 2px;border-radius:6px}
+.modal{position:fixed;inset:0;background:#0007;display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal>div{background:var(--card);border-radius:14px;padding:20px;max-width:640px;width:100%;max-height:92vh;overflow:auto}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:9px 16px;border-radius:9px;z-index:99;box-shadow:0 4px 16px #0005}
+.bars{display:flex;align-items:flex-end;gap:8px;height:190px;padding:6px 0 0}
+.bars .c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11px}
+.bars .p{display:flex;gap:3px;align-items:flex-end;height:150px;width:100%;justify-content:center}
+.bars .p i{display:block;width:42%;border-radius:4px 4px 0 0;min-height:2px}
+.bars .i1{background:#cbd5d0}.bars .i2{background:var(--g2)}
+code,pre{background:var(--g4);border-radius:6px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+pre{padding:10px;overflow:auto;white-space:pre-wrap}code{padding:1px 5px}
+.hide-print{}
+.pr-only{display:none}
+@media print{
+  body{background:#fff}.top,.hide-print,.toast{display:none!important}
+  main{max-width:none;margin:0;padding:0}.card{border:0;padding:0}.pr-only{display:block}
+  .form h2.sec{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .comp .ind,.comp details{display:none}
+  textarea{border:0;resize:none}
 }
-body::before,body::after{
-  content:'';position:fixed;border-radius:50%;filter:blur(100px);z-index:-1;opacity:.55;
-  animation:float 26s ease-in-out infinite alternate;
-  will-change:transform;
-}
-body::before{width:620px;height:620px;top:-190px;left:-170px;background:radial-gradient(circle,var(--sys-green),var(--sys-emerald) 60%,transparent 75%);}
-body::after{width:640px;height:640px;bottom:-210px;right:-170px;background:radial-gradient(circle,var(--sys-teal),var(--sys-mint) 55%,transparent 75%);animation-delay:5s;}
-@keyframes float{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,35px) scale(1.1)}}
-@media (prefers-reduced-motion:reduce){
-  body::before,body::after{animation:none}
-  .login-card,.login-card img,#appScreen .card,.topbar,.btn{animation:none}
-}
-.hidden{display:none !important;}
-
-.topbar{
-  background:var(--glass-strong);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
-  border:.5px solid var(--border-light);color:var(--primary);padding:11px 20px;
-  display:flex;justify-content:space-between;align-items:center;
-  position:sticky;top:10px;z-index:10;margin:10px 14px 0;border-radius:20px;
-  box-shadow:var(--glass-shadow);
-}
-.topbar-left{display:flex;align-items:center;gap:10px;}
-.topbar-left img{height:28px;width:28px;object-fit:contain;border-radius:8px;}
-.topbar h1{font-size:15px;font-weight:600;color:var(--primary);letter-spacing:-.01em;}
-.topbar button{background:rgba(255,255,255,.6);border:.5px solid var(--border-light);color:var(--primary);padding:7px 15px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:500;margin-left:8px;transition:.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.8);}
-.topbar button:hover{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.1),inset 0 1px 0 #fff;transform:translateY(-1px);}
-.topbar button:active{transform:translateY(0) scale(.97);}
-
-.container{max-width:1000px;margin:0 auto;padding:24px;}
-.card{
-  background:var(--glass);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
-  border:.5px solid var(--border-light);border-radius:22px;padding:28px;
-  box-shadow:var(--glass-shadow);margin-bottom:22px;position:relative;overflow:hidden;
-}
-.card::before{
-  content:'';position:absolute;top:0;left:6%;right:6%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);
-}
-#appScreen .card{animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
-#appScreen .card:nth-of-type(2){animation-delay:.06s;}
-#appScreen .card:nth-of-type(3){animation-delay:.12s;}
-.topbar{animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
-
-/* Login */
-.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;}
-.login-card{width:380px;text-align:center;padding:40px 32px;border-radius:26px;animation:cardIn .7s cubic-bezier(.22,1,.36,1) both;}
-@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.login-card img{height:54px;margin-bottom:12px;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(10,74,59,.18));animation:logoPop .8s cubic-bezier(.34,1.56,.64,1) both;}
-@keyframes logoPop{from{opacity:0;transform:scale(.7) rotate(-6deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-.login-card h2{margin-bottom:6px;color:var(--primary);font-size:22px;font-weight:700;letter-spacing:-.02em;}
-.login-card p{color:var(--muted);font-size:13px;margin-bottom:24px;}
-.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.role-btn{padding:15px 8px;border:.5px solid var(--border-light);border-radius:16px;background:rgba(255,255,255,.42);backdrop-filter:blur(10px);cursor:pointer;font-size:13px;font-weight:500;color:var(--text);transition:.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,.8);}
-.role-btn:hover{background:rgba(255,255,255,.75);transform:translateY(-1px);}
-.role-btn.active{border:none;background:linear-gradient(135deg,var(--sys-emerald),var(--sys-green));color:#fff;box-shadow:0 8px 20px -4px rgba(15,184,138,.5),inset 0 1px 0 rgba(255,255,255,.4);}
-input[type=password],input[type=text],input[type=number],select,textarea{
-  width:100%;padding:11px 14px;border:.5px solid var(--border);border-radius:12px;font-size:14px;margin-top:4px;
-  background:rgba(255,255,255,.55);color:var(--text);box-shadow:inset 0 1px 3px rgba(10,74,59,.05);transition:.2s;
-}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sys-emerald);box-shadow:inset 0 1px 3px rgba(10,74,59,.05),0 0 0 4px rgba(15,184,138,.16);}
-label{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-top:10px;letter-spacing:.1px;}
-.btn{background:linear-gradient(135deg,var(--sys-emerald),var(--sys-green));color:#fff;border:none;padding:12px 20px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:600;margin-top:16px;width:100%;box-shadow:0 8px 22px -4px rgba(15,184,138,.5),inset 0 1px 0 rgba(255,255,255,.35);transition:.2s;}
-.btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -4px rgba(15,184,138,.6),inset 0 1px 0 rgba(255,255,255,.4);}
-.btn:active{transform:translateY(0) scale(.98);}
-.error{color:var(--red);font-size:13px;margin-top:8px;min-height:16px;}
-
-/* Form */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-h3.section{color:var(--primary);border-bottom:.5px solid var(--border);padding-bottom:9px;margin:26px 0 14px;font-size:14px;font-weight:700;letter-spacing:-.01em;}
-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;border-radius:12px;overflow:hidden;border:.5px solid var(--border);}
-th,td{padding:9px;text-align:left;border-bottom:.5px solid var(--border);}
-th{background:rgba(255,255,255,.5);font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:600;}
-td{background:rgba(255,255,255,.28);}
-td input,td select{margin:0;padding:7px;font-size:13px;background:rgba(255,255,255,.75);border-radius:8px;}
-.rating-pill{display:inline-block;padding:3px 12px;border-radius:999px;font-size:12px;font-weight:600;color:#fff;}
-.rA{background:var(--green);} .rB{background:var(--amber);} .rC{background:var(--red);} .rN{background:#a1a1a6;}
-.totals{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;}
-.total-box{background:rgba(255,255,255,.42);border:.5px solid var(--border-light);border-radius:18px;padding:16px 18px;flex:1;min-width:150px;text-align:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.8);}
-.total-box .val{font-size:22px;font-weight:700;color:var(--sys-emerald);letter-spacing:-.02em;}
-.total-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;}
-
-/* Dashboard */
-.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
-.stat{background:var(--glass);backdrop-filter:blur(30px) saturate(180%);border:.5px solid var(--border-light);border-radius:20px;padding:18px;text-align:center;box-shadow:var(--glass-shadow);}
-.stat .num{font-size:26px;font-weight:700;color:var(--sys-emerald);letter-spacing:-.02em;}
-.stat .lbl{font-size:12px;color:var(--muted);}
-.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:13px;}
-.bar-track{flex:1;background:rgba(255,255,255,.45);border-radius:999px;height:15px;overflow:hidden;border:.5px solid var(--border);box-shadow:inset 0 1px 3px rgba(0,0,0,.08);}
-.bar-fill{height:100%;border-radius:999px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4);}
-.dash-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin-top:16px;border-radius:12px;overflow:hidden;border:.5px solid var(--border);}
-.dash-table th,.dash-table td{padding:9px;text-align:left;border-bottom:.5px solid var(--border);}
-.dash-table th{background:rgba(255,255,255,.5);font-weight:600;}
-.dash-table td{background:rgba(255,255,255,.22);}
-.save-msg{font-size:13px;margin-top:10px;min-height:16px;}
-.save-msg.ok{color:var(--green);} .save-msg.err{color:var(--red);}
-.note{font-size:12px;color:#8a5a00;background:rgba(255,159,10,.14);border:.5px solid rgba(255,159,10,.35);border-radius:12px;padding:11px 15px;margin-bottom:18px;}
+@media (max-width:700px){.comp .ind{grid-template-columns:1fr}.comp>.hd{flex-direction:column}}
 </style>
 </head>
 <body>
+<div id="app"></div>
+<script id="seed" type="application/json">{"employees":[{"id":4,"name":"Uzair Nawaz","designation":"Assistant Manager - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"MM-8","doj":"2016-05-01","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.8797777777777775},{"id":18,"name":"Muhammad Furhad Rafiq","designation":"Manager - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"MM-5","doj":"2016-12-26","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.9348888888888888},{"id":106,"name":"Muhammad Faisal Qureshi","designation":"Senior Assistant Manager - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"MM-7","doj":"2017-07-10","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.8966666666666667},{"id":205,"name":"Shams Ul Haq","designation":"Senior Officer - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-4","doj":"2018-08-01","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.8526666666666668},{"id":290,"name":"Muhammad Talha Javed","designation":"Assistant Manager - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"MM-8","doj":"2020-10-12","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.9068888888888889},{"id":302,"name":"Bilal Asghar","designation":"Specialist - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-3","doj":"2020-12-01","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.8717777777777778},{"id":311,"name":"Khurram Shahzad","designation":"Executive - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-2","doj":"2021-03-18","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.8877777777777777},{"id":337,"name":"Muhammad Asghar Khan","designation":"Assistant Manager - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"MM-8","doj":"2022-02-01","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.9037777777777777},{"id":359,"name":"Ali Rehman","designation":"Senior Officer - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-4","doj":"2021-01-21","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.9117777777777778},{"id":363,"name":"Ahmar Allah Rakha","designation":"Senior Officer - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-4","doj":"2021-02-09","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.9117777777777778},{"id":368,"name":"Gulfam Hadier","designation":"Officer II - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-6","doj":"2021-11-01","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.863777777777778},{"id":484,"name":"Sadaqat Hussain","designation":"Officer I - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-5","doj":"2023-04-18","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.8797777777777775},{"id":808,"name":"Muhammad Hannan Asif","designation":"Executive - Metalizer","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Metalizer","grade":"JM-2","doj":"2024-07-08","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.882888888888889},{"id":819,"name":"Haseeb Naeem","designation":"Officer II - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-6","doj":"2024-07-22","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.8526666666666668},{"id":877,"name":"Muhammad Zain Raza","designation":"Officer I - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-5","doj":"2024-09-23","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":0.8255555555555556},{"id":941,"name":"Muhammad Junaid","designation":"Executive - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-2","doj":"2025-01-13","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":null},{"id":1023,"name":"Zain Ul Abiden","designation":"Officer II - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-6","doj":"2025-08-04","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":null},{"id":1027,"name":"Karamat Ali","designation":"Officer I - Filmline","location":"IPAK","geo":"Lahore","department":"Filmline","section":"Filmline","grade":"JM-5","doj":"2025-08-11","lineManager":"Muhammad Abubakar","hod":"Muhammad Kamran Khan","perf2024":null}],"assessments":{"4":{"objectives":[{"text":"Ensure that LTIF is ≤3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Daily Production Tracking (100% Production Target)","a":"≥ 102%","b":1,"c":"< 100%","weight":20,"achievement":1,"pct":98.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.82,"pct":84.0},{"text":"Schedule Compliance (≥90%)","a":"95~100%","b":"90~95%","c":"< 90%","weight":15,"achievement":0.92,"pct":98.0},{"text":"BOM Usage Audit (≤5% Variance)","a":"< 5%","b":0.05,"c":"> 5%","weight":15,"achievement":"<5%","pct":98.0},{"text":"Ensure to deliver 1 trainings per month related to operations for capacity building","a":2,"b":1,"c":0,"weight":10,"achievement":1,"pct":81.0}],"bpi":["Developed Behaviour","Need Improvement","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Displays a responsible approach toward assigned duties and maintains acceptable work quality.","hodComment":"He has performed assigned duties in a satisfactory manner and meets the basic requirements of the role. Needs to improve proactive process control and troubleshooting skills. Should enhance shift planning, follow-up, and decision-making.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"18":{"objectives":[{"text":"Ensure that LTIF is ≤3.2","a":"<3.2","b":3.2,"c":">3.2","weight":15,"achievement":"<3.2","pct":100},{"text":"Achieve 100% Production Target","a":"≥ 100%","b":1,"c":"< 100%","weight":20,"achievement":1,"pct":95.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":">3%","pct":85.0},{"text":"Ensure Production Schedule Adherence (≥90%)","a":"95~100%","b":"90~95%","c":"< 90%","weight":15,"achievement":0.92,"pct":95.0},{"text":"Adherence to BOM (≤5% Variance)","a":"< 5%","b":0.05,"c":"> 5%","weight":15,"achievement":0.05,"pct":95.0},{"text":"Ensure OEE (≥88%)","a":">88%","b":0.88,"c":"< 88%","weight":15,"achievement":"< 88%","pct":85.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour"],"lmComment":"He has demonstrated good operational performance and technical competence in managing film line operations. He plays an important role in achieving production targets and maintaining process control. Should work on emotional control, listening skills, and constructive communication, especially during high-pressure situations. Leadership skills need further development, especially in people management, motivation, delegation, and conflict handling.","hodComment":null,"empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"106":{"objectives":[{"text":"Ensure that LTIF is ≤3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Daily Production Tracking (100% Production Target)","a":"≥ 102%","b":1,"c":"< 100%","weight":20,"achievement":1,"pct":98.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.85,"pct":84.0},{"text":"Schedule Compliance (≥90%)","a":"95~100%","b":"90~95%","c":"< 90%","weight":15,"achievement":0.92,"pct":99.0},{"text":"BOM Usage Audit (≤5% Variance)","a":"< 5%","b":0.05,"c":"> 5%","weight":15,"achievement":"<5%","pct":82.0},{"text":"Ensure to deliver 1 trainings per month related to operations for capacity building","a":2,"b":1,"c":0,"weight":10,"achievement":1,"pct":83.0}],"bpi":["Developed Behaviour","Need Improvement","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Handles routine responsibilities efficiently and supports smooth departmental operations.","hodComment":"He has performed assigned duties in a satisfactory manner and meets the basic requirements of the role. Needs to improve proactive process control and troubleshooting skills. Should enhance shift planning, follow-up, and decision-making.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"205":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":98.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":83.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.86,"pct":98.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.84,"pct":86.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour"],"lmComment":"Shows improvement compared to previous assessment period and continues to develop skills.","hodComment":"He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"290":{"objectives":[{"text":"Ensure that LTIF is ≤3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Daily Production Tracking (100% Production Target)","a":"≥ 102%","b":1,"c":"< 100%","weight":20,"achievement":1,"pct":98.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.84,"pct":83.0},{"text":"Schedule Compliance (≥90%)","a":"95~100%","b":"90~95%","c":"< 90%","weight":15,"achievement":0.91,"pct":98.0},{"text":"BOM Usage Audit (≤5% Variance)","a":"< 5%","b":0.05,"c":"> 5%","weight":15,"achievement":"<5%","pct":98.0},{"text":"Ensure to deliver 1 trainings per month related to operations for capacity building","a":2,"b":1,"c":0,"weight":10,"achievement":1,"pct":81.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour"],"lmComment":"Shows good understanding of work processes and follows standard operating procedures effectively.","hodComment":"He has demonstrated very good operational control and responsibility in managing shift activities. He plays an important role in maintaining line stability, production continuity, and shop-floor discipline.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"302":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":98.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":98.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.84,"pct":98.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.87,"pct":96.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Maintains good coordination with supervisors/Incharges and team members.","hodComment":"He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"311":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":99.0},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5 min","pct":83.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":0.85,"pct":98.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.83,"pct":98.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.8,"pct":80.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Demonstrates sound technical capability and effective execution of responsibilities.","hodComment":"He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"337":{"objectives":[{"text":"Ensure that LTIF is ≤3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Daily Production Tracking (100% Production Target)","a":"≥ 102%","b":1,"c":"< 100%","weight":20,"achievement":">100%","pct":98.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.85,"pct":85.0},{"text":"Schedule Compliance (≥90%)","a":"95~100%","b":"90~95%","c":"< 90%","weight":15,"achievement":0.96,"pct":98.0},{"text":"BOM Usage Audit (≤5% Variance)","a":"< 5%","b":0.05,"c":"> 5%","weight":15,"achievement":0.98,"pct":98.0},{"text":"Ensure to deliver 1 trainings per month related to operations for capacity building","a":2,"b":1,"c":0,"weight":10,"achievement":1,"pct":83.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour"],"lmComment":"Shows exceptional commitment, technical competence, and a proactive approach to problem-solving. A valuable contributor to team success.","hodComment":"He has delivered very good and consistent performance. His strong SAP skills combined with solid operational control make him a valuable and reliable contributor to BOPP operations, with strong potential for expanded responsibility.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"359":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":100},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":98.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.03,"pct":95.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.96,"pct":98.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour"],"lmComment":"Maintains consistent performance and meets targets within defined timelines.","hodComment":"He has delivered very good and consistent performance. His technical skills, quality awareness, and disciplined approach make him a valuable member of the BOPP production team, with strong potential for further growth.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"363":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":98.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":96.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.84,"pct":98.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.87,"pct":89.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour"],"lmComment":"Shows reliability in daily operations and adheres to workplace policies.","hodComment":"He has delivered very good and consistent performance. His technical skills, quality awareness, and disciplined approach make him a valuable member of the BOPP production team, with strong potential for further growth.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"368":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":100},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":98.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":83.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.86,"pct":98.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.84,"pct":86.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Shows improvement compared to previous assessment period and continues to develop skills.","hodComment":"He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"484":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":99.0},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":98.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":83.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.84,"pct":98.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.83,"pct":88.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Maintains a calm and positive attitude even during challenging situations and shows mutual respect toward supervisors and coworkers.","hodComment":"He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"808":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":15,"achievement":"<3.2","pct":99.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.86,"pct":100},{"text":"Ensure data logging and analysis on daily basis along with report making\n1. Incident Report\n2. Plant Checklist\n3. Plant Health Report","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.88,"pct":98.0},{"text":"Conduct all audits and facilitate in documentations","a":1,"b":"95~99.9%","c":"<95%","weight":15,"achievement":1,"pct":98.0},{"text":"Ensure that Preventive Maintenance is done as per plan along with analysis & report","a":1,"b":"95~99.9%","c":"<95%","weight":15,"achievement":0.86,"pct":100},{"text":"Identify and implement process improvements in a year","a":"≥ 3","b":2,"c":"≤ 2","weight":15,"achievement":0.87,"pct":98.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Shows exceptional commitment, technical competence, and a proactive approach to problem-solving. A valuable contributor to team success.","hodComment":"He has delivered exceptional performance, demonstrating strong technical expertise, decisive leadership, and full ownership of shift operations. His contribution has been instrumental in achieving line stability, productivity improvement, quality consistency, and operational discipline. He is strongly recommended for recognition, expanded responsibility, and career advancement.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"819":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":98.0},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":86.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":88.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.84,"pct":81.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.87,"pct":80.0}],"bpi":["Developed Behaviour","Need Improvement","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Shows willingness to work but requires closer supervision to maintain performance standards.","hodComment":"He has performed assigned duties in a satisfactory manner; however, there is a need to improve ownership and sense of responsibility in day-to-day operations. Also needs to improve process understanding and machine handling skills. ","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"877":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":98.0},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":98.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":84.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.83,"pct":98.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.86,"pct":98.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Demonstrates good discipline and punctuality with a professional work attitude.","hodComment":"He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"941":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":15,"achievement":"<3.2","pct":98.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.86,"pct":98.0},{"text":"Ensure data logging and analysis on daily basis along with report making\n1. Incident Report\n2. Plant Checklist\n3. Plant Health Report","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.86,"pct":98.0},{"text":"Conduct all audits and facilitate in documentations","a":1,"b":"95~99.9%","c":"<95%","weight":15,"achievement":0.98,"pct":98.0},{"text":"Ensure that Preventive Maintenance is done as per plan along with analysis & report","a":1,"b":"95~99.9%","c":"<95%","weight":15,"achievement":0.86,"pct":86.0},{"text":"Identify and implement process improvements in a year","a":"≥ 3","b":2,"c":"≤ 2","weight":15,"achievement":0.87,"pct":98.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Shows good understanding of work processes and follows standard operating procedures effectively.","hodComment":"He has demonstrated good performance and technical competence in managing process control and supporting stable BOPP line operations. Shows willingness to learn advanced process techniques and new grades. Responds positively to feedback and continuous improvement initiatives.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"1023":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":98.0},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":98.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":"As per sop","pct":87.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.85,"pct":86.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.87,"pct":85.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Demonstrates good discipline and punctuality with a professional work attitude.","hodComment":"He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.","empComment":"EMPLOYEE COMMENTS","status":"hr_final"},"1027":{"objectives":[{"text":"Ensure that LTIF is <=3.2","a":"<3.2","b":3.2,"c":">3.2","weight":20,"achievement":"<3.2","pct":98.0},{"text":"Ensure to recover from film break during production as per set target time","a":"<6.5 min","b":"6.5min","c":">6.5 min","weight":20,"achievement":"<6.5m","pct":98.0},{"text":"Ensure that Screen change/filter change is done as per SOP","a":null,"b":"As per SOP","c":null,"weight":20,"achievement":0.86,"pct":86.0},{"text":"Overall Waste Control ","a":"<3%","b":0.03,"c":">3%","weight":20,"achievement":0.86,"pct":98.0},{"text":"Conduct machine/quality checks as per the checklist","a":1,"b":"95~99.9%","c":"<95%","weight":20,"achievement":0.88,"pct":86.0}],"bpi":["Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Developed Behaviour","Need Improvement"],"lmComment":"Demonstrates willingness to take on additional responsibilities when required. Also displays a responsible and positive attitude toward assigned duties.","hodComment":"He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.\n","empComment":"EMPLOYEE COMMENTS","status":"hr_final"}},"competencies":[{"title":"TEAMWORK\n\nAbility to understand “WE” versus “I” mindset, and work together to ensure that everyone wins.","developed":"• Sets and communicates clear team objectives. Keeps the team motivated to achieve the Team objectives.\n• Involves team members in defining ways to achieve desired results and defining expectations about how team members will work together.\n• Effectively manages and guides team efforts.\n• Acts in a way that is respectful of other people who are not seniors.","needs":"• Fails to lead or inspire team members to achieve team objectives and outcomes.\n• Fails to boost the morale of the team.\n• Fails to implement the right solutions recommended by the team.\n• Lacks provision of a platform for sharing knowledge and experience.\n• Fails to recognize the accomplishments of own team and cross-functional teams."},{"title":"COACHING & DEVELOPMENT\n\nAbility to develop self and others in the creation of a diverse & high-performing culture","developed":"• Leverages performance, development, and key behaviors to build people capabilities.\n• Helps team members to identify and understand their own blind spots that prevent them from working more effectively.\n• Coaches others (listens, questions, challenges) to let them explore the solutions independently.\n• Aligns development expectations and actively supports personal & professional development.\n• Builds diverse teams for long-term sustainability.","needs":"• Does not adequately recognize desired behaviors.\n• Tends to provide solutions or answers rather than giving the opportunity for learning.\n• Avoids the conversations required to align career and development opportunities of self & team.\n• Lacks active listening which affects the team’s motivation and performance.\n• Discourages the team for learning & development opportunities."},{"title":"OWNERSIP\n\n\nAbility to take responsibility for one’s work, decisions, and actions","developed":"• Promotes a culture, where people can be their authentic selves to take ownership of what they do.\n• Takes ownership of the team’s actions instead of blaming team members.\n• Adapts effectively to different situations even under stress or pressure to achieve the Company’s Objectives.\n• Addresses difficult issues in a timely manner where possible without putting the onus on someone.\n• Is clear in his thoughts and proposes solutions to problems effectively.","needs":"• Lacks the ability to track progress and intervene when necessary.\n• Fails to own a well-developed point of view to achieve the Company’s Objectives.\n• Dismisses alternative ideas and discourages colleagues from suggesting new ways of doing things.\n• Fails to take ownership of personal or team performance.\n• Fails to effectively communicate the Company’s strategy to others"},{"title":"HUMILITY\n\nAbility to be humble in a demonstrable way and lead with an example of always doing the right thing","developed":"• Recognizes quality contributions of all team members & cross-functional team members\n• Listens actively to the team’s point of view instead of using authority.\n• Gives direct actionable feedback about performance and behaviour by treating others professionally\n• Keeps confidentiality intact of other’s personal issues and doesn’t share publicly.\n• Takes the criticism of someone positively, keeping the authority aside","needs":"• Fails to act as a team member because of the authorities.\n• Finds shortcuts when under pressure instead of following the defined protocols.\n• Presents him/herself in a way that is inconsistent with the vision of the Company.\n• Makes false promises to avoid transparent discussion.\n• Puts him/herself before the Company"},{"title":"INTEGRITY\n\nAbility to commit ethical conduct and moral principles in all activities","developed":"• Leads by example and set clear expectations for ethical behaviour in their teams.\n• Provides honest, constructive, and timely feedback to one’s team members.\n• Makes fair and objective decisions based on evidence and best practices.\n• Communicates openly and effectively with all stakeholders about the Objectives, progress, and challenges of their work.\n• Recognizes team members who demonstrate integrity and address those who do not.","needs":"• Fails to follow through on one’s commitments or promises or lets others off the hook for theirs.\n• Rationalizes own mistakes or failures and discourages others from addressing theirs.\n• Lacks in addressing ethical violations within their teams.\n• Exhibits insensitive behaviour in identifying and addressing conflicts of interest.\n• Lacks in developing the biasness free work environment."},{"title":"INNOVATION\n\nThe ability to generate novel ideas, solutions, approaches, and to think outside the box to add value to tasks,\nprojects, and the organization as a whole.","developed":"• Provides the freedom to experiment and encourages to learn from failures.\n• Empower team members to share novel ideas.\n• Invest in training to enhance innovation skills.\n• Provide constructive feedback and coaching to staff on their innovative initiatives.\n• Tracks and measures the outcomes and benefits of innovation initiatives against predefined criteria.","needs":"• Restricts staff from exploring and experimenting with new ideas.\n• Overlooks staff efforts and achievements in innovative initiatives.\n• Fails to monitor or report on the progress and impact of innovation initiatives.\n• Overlooks opportunities for diverse perspectives to inculcate creativity.\n• Discourages unconventional approaches to problem-solving"}]}</script>
+<script id="expected" type="application/json">{"4":{"ipi":93.9,"ipiRating":"B - Meet Expectation","bpi":0.6668000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %"]},"18":{"ipi":92.25,"ipiRating":"B - Meet Expectation","bpi":1.0002000000000002,"bpiRating":"A - Exceed Expectation","final":"B A","objRatings":["A - Exceed Expectation","B - Meet Expectation","B - Meet Expectation","B - Meet Expectation","B - Meet Expectation","B - Meet Expectation","Add Achievement %"]},"106":{"ipi":91.85,"ipiRating":"B - Meet Expectation","bpi":0.6668000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","B - Meet Expectation","B - Meet Expectation","Add Achievement %"]},"205":{"ipi":93.00000000000001,"ipiRating":"B - Meet Expectation","bpi":1.0002000000000002,"bpiRating":"A - Exceed Expectation","final":"B A","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]},"290":{"ipi":93.70000000000002,"ipiRating":"B - Meet Expectation","bpi":1.0002000000000002,"bpiRating":"A - Exceed Expectation","final":"B A","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %"]},"302":{"ipi":98.00000000000001,"ipiRating":"A - Exceed Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"A B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]},"311":{"ipi":91.6,"ipiRating":"B - Meet Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]},"337":{"ipi":94.3,"ipiRating":"B - Meet Expectation","bpi":1.0002000000000002,"bpiRating":"A - Exceed Expectation","final":"B A","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %"]},"359":{"ipi":98.19999999999999,"ipiRating":"A - Exceed Expectation","bpi":1.0002000000000002,"bpiRating":"A - Exceed Expectation","final":"A A","objRatings":["A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","Add Achievement %","Add Achievement %"]},"363":{"ipi":96.2,"ipiRating":"B - Meet Expectation","bpi":1.0002000000000002,"bpiRating":"A - Exceed Expectation","final":"B A","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]},"368":{"ipi":93.00000000000001,"ipiRating":"B - Meet Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]},"484":{"ipi":93.19999999999999,"ipiRating":"B - Meet Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]},"808":{"ipi":98.85000000000001,"ipiRating":"A - Exceed Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"A B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","Add Achievement %"]},"819":{"ipi":86.6,"ipiRating":"B - Meet Expectation","bpi":0.6668000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","B - Meet Expectation","B - Meet Expectation","B - Meet Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]},"877":{"ipi":95.19999999999999,"ipiRating":"B - Meet Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","A - Exceed Expectation","Add Achievement %","Add Achievement %"]},"941":{"ipi":96.2,"ipiRating":"B - Meet Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","Add Achievement %"]},"1023":{"ipi":90.8,"ipiRating":"B - Meet Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","B - Meet Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]},"1027":{"ipi":93.2,"ipiRating":"B - Meet Expectation","bpi":0.8335000000000001,"bpiRating":"B - Meet Expectation","final":"B B","objRatings":["A - Exceed Expectation","A - Exceed Expectation","B - Meet Expectation","A - Exceed Expectation","B - Meet Expectation","Add Achievement %","Add Achievement %"]}}</script>
+<script>/* ===== PMS ENGINE: exact port of the Excel formulas =====
+   All calculations use integer (hundredths) math so that floating-point
+   error can never push a boundary value such as 98.0 into the wrong rating. */
+const PMS = (() => {
+  const LEVELS = { A: 'A - Exceed Expectation', B: 'B - Meet Expectation', C: 'C - Below Expectation' };
+  const DEV = 'Developed Behaviour', NEED = 'Need Improvement';
+  const BOX = {
+    AA: 'Exceptional Performer', AB: 'High Performer', AC: 'Potential Resource',
+    BA: 'High Performer', BB: 'Good Performer', BC: 'Contributor',
+    CA: 'Concern', CB: 'Low Performer', CC: 'Low Performer'
+  };
+  // Ideal curve (Dashboard sheet image): % of workforce per box
+  const IDEAL = { CC: 5, CB: 5, CA: 5, BC: 10, BB: 50, AC: 10, BA: 5, AB: 5, AA: 5 };
+  const POLICY = { minObj: 4, maxObj: 7, maxWeight: 30, totalWeight: 100 };
 
-<!-- ============ LOGIN ============ -->
-<div id="loginScreen" class="login-wrap">
-  <div class="card login-card">
-    <img src="logo.png" alt="IPAK" onerror="this.style.display='none'">
-    <h2>IPAK Performance Assessment</h2>
-    <p>Select your role and enter PIN to continue</p>
-    <div class="role-grid" id="roleGrid">
-      <button class="role-btn" data-role="employee">Employee</button>
-      <button class="role-btn" data-role="manager">Manager</button>
-      <button class="role-btn" data-role="hod">HOD</button>
-      <button class="role-btn" data-role="admin">Admin</button>
-    </div>
-    <input type="password" id="pinInput" placeholder="Enter PIN" maxlength="10">
-    <button class="btn" onclick="login()">Login</button>
-    <div class="error" id="loginError"></div>
-  </div>
-</div>
+  const H = x => Math.round(Number(x) * 100);          // -> hundredths (integer)
+  const isNum = x => x !== '' && x !== null && x !== undefined && !isNaN(Number(x));
 
-<!-- ============ APP SHELL ============ -->
-<div id="appScreen" class="hidden">
-  <div class="topbar">
-    <div class="topbar-left">
-      <img src="logo.png" alt="IPAK" onerror="this.style.display='none'">
-      <h1 id="topTitle">IPAK PMS</h1>
-    </div>
-    <div>
-      <button id="dashBtn" onclick="showDashboard()" class="hidden">Dashboard</button>
-      <button id="formBtn" onclick="showForm()" class="hidden">Fill Form</button>
-      <button onclick="logout()">Logout</button>
-    </div>
-  </div>
-
-  <div class="container">
-
-    <!-- ===== FORM VIEW ===== -->
-    <div id="formView">
-      <div class="card">
-        <div class="note" id="scriptNote"></div>
-        <h3 class="section" style="margin-top:0">Employee Information</h3>
-        <div class="grid2">
-          <div><label>Employee ID</label><input id="f_EmployeeID" placeholder="Employee code likhein"><span id="empLookupStatus" style="font-size:11px;color:var(--muted);display:block;margin-top:3px;"></span></div>
-          <div><label>Name</label><input id="f_Name"></div>
-          <div><label>Designation</label><input id="f_Designation"></div>
-          <div><label>Department</label><input id="f_Department"></div>
-          <div><label>Sub Department</label><input id="f_SubDepartment"></div>
-          <div><label>Grade</label><input id="f_Grade"></div>
-          <div><label>Line Manager</label><input id="f_LineManager"></div>
-          <div><label>Head of Department</label><input id="f_HOD"></div>
-          <div><label>Date of Joining</label><input type="text" id="f_DOJ" placeholder="DD-MM-YYYY"></div>
-          <div><label>Performance Rating 2024</label><input id="f_Rating2024"></div>
-        </div>
-        <button class="btn" style="width:auto;background:#64748b" onclick="loadExisting()">Load Existing Record</button>
-
-        <h3 class="section">Individual Performance Indicator (IPI) — SMART Objectives</h3>
-        <table>
-          <thead><tr><th style="width:38%">Objective</th><th>Weightage %</th><th>Achievement %</th><th>Level</th><th>Weighted Score</th></tr></thead>
-          <tbody id="objBody"></tbody>
-        </table>
-        <div class="totals">
-          <div class="total-box"><div class="val" id="ipiTotalVal">0.0</div><div class="lbl">IPI Total Score</div></div>
-          <div class="total-box"><div class="val" id="ipiRatingVal">—</div><div class="lbl">IPI Final Rating</div></div>
-        </div>
-
-        <h3 class="section">Behaviour Performance Indicator (BPI) — Competencies</h3>
-        <table>
-          <thead><tr><th>Competency</th><th style="width:160px">Rating</th></tr></thead>
-          <tbody id="compBody"></tbody>
-        </table>
-        <div class="totals">
-          <div class="total-box"><div class="val" id="bpiTotalVal">0.0</div><div class="lbl">BPI Total Score</div></div>
-          <div class="total-box"><div class="val" id="bpiRatingVal">—</div><div class="lbl">BPI Final Rating</div></div>
-          <div class="total-box"><div class="val" id="finalRatingVal">—</div><div class="lbl">Overall Final Rating</div></div>
-        </div>
-
-        <h3 class="section">Comments</h3>
-        <label id="commentsLabel">Comments</label>
-        <textarea id="f_Comments" rows="4"></textarea>
-
-        <button class="btn" onclick="saveRecord()">Save Record</button>
-        <div class="save-msg" id="saveMsg"></div>
-      </div>
-    </div>
-
-    <!-- ===== DASHBOARD VIEW ===== -->
-    <div id="dashView" class="hidden">
-      <div class="stat-row" id="statRow"></div>
-      <div class="card">
-        <h3 class="section" style="margin-top:0">Final Rating Distribution</h3>
-        <div id="ratingBars"></div>
-      </div>
-      <div class="card">
-        <h3 class="section" style="margin-top:0">All Employee Records</h3>
-        <button class="btn" style="width:auto;background:#64748b" onclick="loadDashboard()">Refresh</button>
-        <div style="overflow-x:auto">
-          <table class="dash-table" id="dashTable"></table>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<script>
-/* ============================================================
-   CONFIG — edit these two things after you deploy Code.gs
-   ============================================================ */
-const CONFIG = {
-  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwXljnjllpB-C3pg4NtS_QBj4IqwHbwsg77GjhgOE0dVcjzNybMIbvBqJjrWrdfaWci8g/exec",
-  PINS: { employee: "1111", manager: "2222", hod: "3333", admin: "9999" },
-  /* Published Google Sheet (Employee Information) — auto-fill source.
-     Built from your pubhtml link by swapping the ending for a CSV export. */
-  SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6Yohp4Ah0K-1lYv3regS1HWxDZLJuQ_3SAdZK99IOI68jnHCGvnPB4hI4Te7q1HDo_blJz-AT57Yb/pub?output=csv"
-};
-
-const COMPETENCIES = ["Teamwork","Coaching & Development","Ownership","Humility","Integrity","Innovation"];
-const FORM_TYPE_MAP = { employee: "Employee", manager: "Manager", hod: "HOD" };
-
-let selectedRole = null;
-let currentRole = null;
-let objectives = [];
-
-/* ---------- employee directory (from published Google Sheet) ---------- */
-let employeeDirectory = null;      // Map: normalized employee code -> row object
-let employeeDirectoryLoading = null; // in-flight promise so we only fetch once
-
-/* Parses CSV text into an array of row objects, keyed by header. Handles
-   quoted fields (commas/newlines inside quotes) which Google's CSV export uses. */
-function parseCSV(text){
-  const rows = [];
-  let row = [], field = '', inQuotes = false;
-  for(let i = 0; i < text.length; i++){
-    const c = text[i], next = text[i+1];
-    if(inQuotes){
-      if(c === '"' && next === '"'){ field += '"'; i++; }
-      else if(c === '"'){ inQuotes = false; }
-      else { field += c; }
-    } else {
-      if(c === '"'){ inQuotes = true; }
-      else if(c === ','){ row.push(field); field = ''; }
-      else if(c === '\r'){ /* skip */ }
-      else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
-      else { field += c; }
-    }
+  // Objective level: Excel L15:L21
+  function objLevel(pct) {
+    if (!isNum(pct)) return null;
+    const h = H(pct);
+    if (h >= 9800) return 'A';
+    if (h >= 8000) return 'B';
+    if (h >= 1) return 'C';          // Excel: K>=0.01%
+    return null;                     // 0 => "Add Achievement %"
   }
-  if(field.length || row.length){ row.push(field); rows.push(row); }
-  if(!rows.length) return [];
-  const headers = rows[0].map(h => h.trim());
-  return rows.slice(1)
-    .filter(r => r.some(v => v.trim() !== ''))
-    .map(r => {
-      const obj = {};
-      headers.forEach((h, i) => { obj[h] = (r[i] || '').trim(); });
-      return obj;
+
+  // IPI: Excel N14 + L22. (Fix: Excel returned FALSE between 79.9 and 80)
+  function ipi(objs) {
+    let S = 0, W = 0;
+    (objs || []).forEach(o => { const w = isNum(o.weight) ? H(o.weight) : 0; const p = isNum(o.pct) ? H(o.pct) : 0; S += w * p; W += w; });
+    return { points: S / 1e6, weight: W / 100, level: S >= 98e6 ? 'A' : S >= 80e6 ? 'B' : 'C' };
+  }
+
+  // BPI: Excel Q26:Q31, Q25, L32. 6 competencies x 16.67% ; A>=100%, B>=66.68%
+  function bpi(ratings) {
+    const r = ratings || [];
+    const dev = r.filter(x => x === DEV).length;
+    const answered = r.filter(x => x === DEV || x === NEED).length;
+    const scoreH = dev * 1667;                                   // hundredths of percent
+    return { developed: dev, answered, score: scoreH / 100, level: scoreH >= 10000 ? 'A' : scoreH >= 6668 ? 'B' : 'C' };
+  }
+
+  function final(a) {
+    const i = ipi(a.objectives), b = bpi(a.bpi);
+    const code = i.level + b.level;
+    return { ipi: i, bpi: b, code, label: BOX[code] };
+  }
+
+  // Policy validation (Guidelines page): 4-7 objectives, total 100, max 30% each
+  function validate(a) {
+    const errors = [], warnings = [];
+    const o = a.objectives || [];
+    if (o.length < POLICY.minObj) errors.push(`At least ${POLICY.minObj} SMART objectives are required (currently ${o.length}).`);
+    if (o.length > POLICY.maxObj) errors.push(`A maximum of ${POLICY.maxObj} objectives is allowed (currently ${o.length}).`);
+    const W = o.reduce((s, x) => s + (isNum(x.weight) ? H(x.weight) : 0), 0);
+    if (W !== POLICY.totalWeight * 100) errors.push(`Total weightage must be 100% (currently ${W / 100}%).`);
+    o.forEach((x, i) => {
+      if (!String(x.text || '').trim()) errors.push(`Objective ${i + 1}: title is empty.`);
+      if (isNum(x.weight) && Number(x.weight) > POLICY.maxWeight) errors.push(`Objective ${i + 1}: weightage is ${x.weight}%, the maximum allowed is ${POLICY.maxWeight}%.`);
+      if (!isNum(x.weight) || Number(x.weight) <= 0) errors.push(`Objective ${i + 1}: enter a weightage.`);
+      if (!isNum(x.pct)) errors.push(`Objective ${i + 1}: enter the Achievement %.`);
+      else if (Number(x.pct) < 0 || Number(x.pct) > 150) errors.push(`Objective ${i + 1}: Achievement % must be between 0 and 150.`);
+      else if (Number(x.pct) === 0) warnings.push(`Objective ${i + 1}: Achievement is 0%.`);
     });
-}
+    const b = bpi(a.bpi);
+    if (b.answered < 6) errors.push(`Rate all 6 BPI competencies (${b.answered}/6 done).`);
+    return { errors, warnings, ok: errors.length === 0 };
+  }
 
-/* Normalizes a header/field name for loose matching: "Employee Code",
-   "employee_id", "EMP-ID" all become "employeeid" / "employeecode" etc. */
-function normKey(s){ return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  function distribution(list) {
+    const d = {}; Object.keys(IDEAL).forEach(k => d[k] = 0);
+    list.forEach(a => { d[final(a).code]++; });
+    return d;
+  }
 
-/* Maps our internal form field names to the possible header spellings
-   your sheet might use. First match wins, in order. */
-const SHEET_FIELD_ALIASES = {
-  EmployeeID:    ['employeeid','employeecode','empid','empcode','id','code','staffid','staffcode'],
-  Name:          ['name','employeename','fullname'],
-  Designation:   ['designation','jobtitle','title','position'],
-  Department:    ['department','dept'],
-  SubDepartment: ['subdepartment','sub_department','section','subdept'],
-  Grade:         ['grade','jobgrade'],
-  LineManager:   ['linemanager','manager','reportingmanager','lm'],
-  HOD:           ['hod','headofdepartment','headofdept'],
-  DOJ:           ['doj','dateofjoining','joiningdate'],
-  Rating2024:    ['rating2024','performancerating2024','rating']
+  return { LEVELS, DEV, NEED, BOX, IDEAL, POLICY, H, isNum, objLevel, ipi, bpi, final, validate, distribution };
+})();
+if (typeof module !== 'undefined') module.exports = PMS;
+</script>
+<script>(function () {
+'use strict';
+const SEED = JSON.parse(document.getElementById('seed').textContent);
+const EXPECTED = JSON.parse(document.getElementById('expected').textContent);
+const COMP = SEED.competencies;
+const KEY = 'pms2025.v1';
+const STATUS = {
+  draft: ['Draft', 's-draft'], lm_submitted: ['Pending HOD approval', 's-lm'],
+  hod_approved: ['HOD approved · pending HR', 's-hod'], hr_final: ['Finalized by HR', 's-final']
 };
+const ROLES = { admin: 'Admin', hr: 'HR', lm: 'Line Manager', hod: 'Head of Department' };
+const ORDER = ['CC', 'CB', 'CA', 'BC', 'BB', 'AC', 'BA', 'AB', 'AA'];
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const now = () => new Date().toISOString();
+const fmtDate = d => d ? new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+const fmtTime = d => d ? new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+const clone = o => JSON.parse(JSON.stringify(o));
 
-function buildFieldMap(headers){
-  const normed = headers.map(h => ({ raw: h, norm: normKey(h) }));
-  const map = {};
-  Object.keys(SHEET_FIELD_ALIASES).forEach(key => {
-    const aliases = SHEET_FIELD_ALIASES[key];
-    const found = normed.find(h => aliases.includes(h.norm));
-    if(found) map[key] = found.raw;
+/* ================= STATE ================= */
+function seedState() {
+  const as = {};
+  Object.entries(SEED.assessments).forEach(([id, a]) => {
+    as[id] = { ...clone(a), empComment: '', status: 'draft', sign: {}, _rev: 1,
+      log: [{ t: now(), by: 'System', a: 'Imported from Excel (PMS 2025 - Filmline IPAK)' }] };
   });
-  return map;
+  return { employees: SEED.employees.map(e => ({ ...e, _rev: 1 })), assessments: as,
+    session: { role: 'admin', person: '' }, cloud: { apiKey: '', projectId: '' }, auth: null,
+    ut: {}, dirty: {}, conflicts: {}, lastSync: null };
 }
-
-async function loadEmployeeDirectory(){
-  if(employeeDirectory) return employeeDirectory;
-  if(employeeDirectoryLoading) return employeeDirectoryLoading;
-  employeeDirectoryLoading = (async () => {
-    const res = await fetch(CONFIG.SHEET_CSV_URL);
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    const text = await res.text();
-    const rawRows = parseCSV(text);
-    if(!rawRows.length) throw new Error('Sheet empty ya format samajh nahi aaya');
-    const headers = Object.keys(rawRows[0]);
-    const fieldMap = buildFieldMap(headers);
-    if(!fieldMap.EmployeeID) throw new Error('Sheet mein Employee ID/Code column nahi mila');
-    const dir = new Map();
-    rawRows.forEach(r => {
-      const code = normKey(r[fieldMap.EmployeeID]);
-      if(!code) return;
-      dir.set(code, { raw: r, fieldMap });
-    });
-    employeeDirectory = dir;
-    return dir;
-  })();
-  return employeeDirectoryLoading;
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
+if (!S || !S.employees) S = seedState();
+function persist() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage full/blocked */ } }
+let toastT;
+function toast(m) {
+  let t = $('.toast'); if (!t) { t = document.createElement('div'); t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = m; clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 3200);
 }
+const empById = id => S.employees.find(e => String(e.id) === String(id));
+const people = k => [...new Set(S.employees.map(e => e[k]).filter(Boolean))].sort();
 
-/* Looks up the typed employee code and fills matching form fields. */
-async function autoFillEmployeeInfo(){
-  const status = document.getElementById('empLookupStatus');
-  const codeInput = document.getElementById('f_EmployeeID');
-  if(!codeInput) return;
-  const code = codeInput.value.trim();
-  if(!code){ status.textContent = ''; return; }
-  status.textContent = 'Employee dhoondh raha hoon...';
-  status.style.color = 'var(--muted)';
-  try{
-    const dir = await loadEmployeeDirectory();
-    const entry = dir.get(normKey(code));
-    if(!entry){
-      status.textContent = 'Yeh Employee Code sheet mein nahi mila.';
-      status.style.color = 'var(--red)';
-      return;
-    }
-    const { raw, fieldMap } = entry;
-    ['Name','Designation','Department','SubDepartment','Grade','LineManager','HOD','DOJ','Rating2024'].forEach(key => {
-      const header = fieldMap[key];
-      const el = document.getElementById('f_' + key);
-      if(el && header && raw[header]) el.value = raw[header];
-    });
-    status.textContent = 'Employee information load ho gayi ✓';
-    status.style.color = 'var(--green)';
-  }catch(err){
-    status.textContent = 'Load nahi ho saka: ' + err.message;
-    status.style.color = 'var(--red)';
+/* ================= PERMISSIONS ================= */
+function can(action, e, a) {
+  const r = S.session.role, p = S.session.person;
+  const admin = r === 'admin', hr = r === 'hr', isLM = r === 'lm' && e.lineManager === p, isHOD = r === 'hod' && e.hod === p;
+  switch (action) {
+    case 'edit': return a.status === 'draft' && (admin || hr || isLM);
+    case 'hod': return a.status === 'lm_submitted' && (admin || isHOD);
+    case 'hr': return a.status === 'hod_approved' && (admin || hr);
+    case 'empComment': return (a.status === 'hod_approved' || a.status === 'hr_final') && (admin || hr);
+    case 'reopen': return a.status !== 'draft' && (admin || hr);
+    case 'manage': return admin || hr;
+    case 'view': return admin || hr || isLM || isHOD;
   }
+  return false;
 }
 
-/* ---------- login ---------- */
-document.getElementById('roleGrid').addEventListener('click', e=>{
-  if(e.target.classList.contains('role-btn')){
-    document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
-    e.target.classList.add('active');
-    selectedRole = e.target.dataset.role;
+/* ================= CLOUD (Firebase Auth + Firestore REST) ================= */
+const Cloud = {
+  get on() { return !!(S.cloud.apiKey && S.cloud.projectId); },
+  get signedIn() { return this.on && !!S.auth; },
+  base() { return `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(S.cloud.projectId)}/databases/(default)/documents`; },
+  async login(email, pw) {
+    const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${encodeURIComponent(S.cloud.apiKey)}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: pw, returnSecureToken: true }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(({ INVALID_LOGIN_CREDENTIALS: 'Wrong email or password', EMAIL_NOT_FOUND: 'Email not found', INVALID_PASSWORD: 'Wrong password', API_KEY_INVALID: 'API key is invalid' }[j.error?.message]) || j.error?.message || 'Login failed');
+    S.auth = { email: String(j.email).toLowerCase(), idToken: j.idToken, refreshToken: j.refreshToken, exp: Date.now() + Number(j.expiresIn) * 1000 };
+    try { await this.loadRole(); } catch (e) { S.auth = null; persist(); throw e; }
+    persist();
+  },
+  async token() {
+    if (!S.auth) throw new Error('Not signed in');
+    if (Date.now() > S.auth.exp - 60000) {
+      const r = await fetch(`https://securetoken.googleapis.com/v1/token?key=${encodeURIComponent(S.cloud.apiKey)}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(S.auth.refreshToken)}` });
+      const j = await r.json();
+      if (!r.ok) { S.auth = null; persist(); throw new Error('Session expired, please sign in again'); }
+      S.auth.idToken = j.id_token; S.auth.refreshToken = j.refresh_token; S.auth.exp = Date.now() + Number(j.expires_in) * 1000; persist();
+    }
+    return S.auth.idToken;
+  },
+  async api(method, path, body, qs) {
+    const tok = await this.token();
+    const r = await fetch(`${this.base()}/${path}${qs || ''}`, { method, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: body ? JSON.stringify(body) : undefined });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { const e = new Error(j.error?.message || ('HTTP ' + r.status)); e.status = r.status; throw e; }
+    return j;
+  },
+  async loadRole() {
+    let d;
+    try { d = await this.api('GET', 'users/' + encodeURIComponent(S.auth.email)); }
+    catch (e) { throw new Error(e.status === 404 ? 'No role assigned to this email. Ask your Admin to add you in the "users" collection.' : (e.status === 403 ? 'Access denied by database rules.' : e.message)); }
+    const role = d.fields?.role?.stringValue, person = d.fields?.person?.stringValue || '';
+    if (!ROLES[role]) throw new Error('Invalid role on your user record.');
+    S.session = { role, person };
+  },
+  async listAll(col) {
+    let out = [], tok = '';
+    do { const j = await this.api('GET', col, null, `?pageSize=300${tok ? '&pageToken=' + encodeURIComponent(tok) : ''}`); out = out.concat(j.documents || []); tok = j.nextPageToken || ''; } while (tok);
+    return out;
+  },
+  async put(col, id, obj, force) {
+    const key = col + ':' + id;
+    const body = { fields: { json: { stringValue: JSON.stringify(obj) }, rev: { integerValue: String((obj._rev || 0) + 1) }, updatedBy: { stringValue: S.auth.email } } };
+    let qs = '?updateMask.fieldPaths=json&updateMask.fieldPaths=rev&updateMask.fieldPaths=updatedBy';
+    if (!force) qs += S.ut[key] ? `&currentDocument.updateTime=${encodeURIComponent(S.ut[key])}` : '&currentDocument.exists=false';
+    const j = await this.api('PATCH', `${col}/${encodeURIComponent(id)}`, body, qs);
+    obj._rev = (obj._rev || 0) + 1; S.ut[key] = j.updateTime;
+  }
+};
+
+let syncing = false, syncState = 'local', pushT, lastErr = '';
+function mark(key) { S.dirty[key] = 1; persist(); schedulePush(); updateChip(); }
+function schedulePush() { if (!Cloud.signedIn) return; clearTimeout(pushT); pushT = setTimeout(() => sync(false), 1200); }
+async function sync(pull = true) {
+  if (!Cloud.signedIn || syncing) return;
+  syncing = true; syncState = 'sync'; updateChip();
+  try {
+    for (const key of Object.keys(S.dirty)) {
+      const [k, id] = key.split(':'); const col = k === 'as' ? 'assessments' : 'employees';
+      const obj = k === 'as' ? S.assessments[id] : empById(id);
+      if (!obj) { delete S.dirty[key]; continue; }
+      try { await Cloud.put(col, id, obj, false); delete S.dirty[key]; delete S.conflicts[key]; }
+      catch (e) { if (e.status === 409 || e.status === 400 && /precondition|exist/i.test(e.message) || e.status === 412) S.conflicts[key] = 1; else throw e; }
+    }
+    if (pull) {
+      for (const [col, k] of [['employees', 'emp'], ['assessments', 'as']]) {
+        const docs = await Cloud.listAll(col);
+        docs.forEach(d => {
+          const id = decodeURIComponent(d.name.split('/').pop()), key = k + ':' + id;
+          let obj; try { obj = JSON.parse(d.fields.json.stringValue); } catch (e) { return; }
+          obj._rev = Number(d.fields.rev?.integerValue || 0);
+          if (S.dirty[key]) { if (S.ut[key] !== d.updateTime) S.conflicts[key] = 1; return; }
+          if (S.ut[key] === d.updateTime) return;
+          S.ut[key] = d.updateTime;
+          if (k === 'as') S.assessments[id] = obj;
+          else { const i = S.employees.findIndex(x => String(x.id) === id); if (i >= 0) S.employees[i] = obj; else S.employees.push(obj); }
+        });
+      }
+      S.lastSync = now();
+    }
+    syncState = Object.keys(S.conflicts).length ? 'conflict' : 'ok'; lastErr = '';
+  } catch (e) {
+    lastErr = e.message; syncState = e.status === 403 ? 'denied' : 'offline';
+    if (/Session expired|Not signed/.test(e.message)) { syncState = 'out'; }
+  }
+  syncing = false; persist(); updateChip(); if (!isEditingInput()) renderKeep();
+}
+const isEditingInput = () => /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+setInterval(() => { if (Cloud.signedIn && !document.hidden) sync(true); }, 45000);
+window.addEventListener('online', () => sync(true));
+
+function updateChip() {
+  const el = $('#syncChip'); if (!el) return;
+  const n = Object.keys(S.dirty).length;
+  const m = {
+    local: ['warn', 'Local mode · this browser only'], sync: ['warn', 'Syncing…'],
+    ok: ['ok', 'Cloud synced' + (S.lastSync ? ' · ' + fmtTime(S.lastSync) : '')],
+    offline: ['err', `Offline · ${n} unsaved`], denied: ['err', 'Cloud: permission denied'],
+    conflict: ['err', 'Conflict · action needed'], out: ['err', 'Signed out']
+  };
+  const [c, t] = m[Cloud.on ? (Cloud.signedIn ? syncState : 'out') : 'local'];
+  el.innerHTML = `<span class="dot ${c}"></span>${esc(t)}${n && syncState !== 'offline' && Cloud.signedIn ? ' · ' + n + ' pending' : ''}`;
+  el.title = lastErr;
+}
+
+/* ================= HELPERS ================= */
+const lvlPill = l => l ? `<span class="pill l${l}">${l}</span>` : '<span class="pill l0">–</span>';
+const lvlFull = l => l ? `<span class="pill l${l}">${PMS.LEVELS[l]}</span>` : '<span class="pill l0">Add Achievement %</span>';
+const statusPill = s => `<span class="pill ${STATUS[s][1]}">${STATUS[s][0]}</span>`;
+const summary = (e) => { const a = S.assessments[e.id]; return a ? PMS.final(a) : null; };
+function audit(a, text) { (a.log = a.log || []).push({ t: now(), by: Cloud.signedIn ? S.auth.email : (ROLES[S.session.role] + (S.session.person ? ' – ' + S.session.person : '')), a: text }); }
+function visibleEmps() { return S.employees.filter(e => { const a = S.assessments[e.id]; return a && can('view', e, a); }); }
+function blankAssessment() {
+  return { objectives: [1, 2, 3, 4].map(() => ({ text: '', a: '', b: '', c: '', weight: 25, achievement: '', pct: '' })), bpi: Array(6).fill(''),
+    lmComment: '', hodComment: '', empComment: '', status: 'draft', sign: {}, _rev: 0, log: [{ t: now(), by: 'System', a: 'Form created' }] };
+}
+
+/* ================= ROUTER / SHELL ================= */
+let route = { name: 'dashboard', arg: '', q: {} };
+function parseHash() {
+  const h = location.hash.replace(/^#\/?/, ''); const [path, qs] = h.split('?'); const [name, arg] = (path || 'dashboard').split('/');
+  const q = {}; new URLSearchParams(qs || '').forEach((v, k) => q[k] = v);
+  route = { name: name || 'dashboard', arg: arg || '', q };
+}
+function go(h) { location.hash = h; }
+window.addEventListener('hashchange', () => { parseHash(); render(); window.scrollTo(0, 0); });
+function renderKeep() { const y = window.scrollY; render(); window.scrollTo(0, y); }
+
+function shell(body) {
+  const nav = [['dashboard', 'Dashboard'], ['employees', 'Employees'], ['guidelines', 'Guidelines'], ['settings', 'Settings'], ['tests', 'Tests & Audit']];
+  const on = route.name === 'emp' ? 'employees' : route.name;
+  const who = Cloud.signedIn ? `${esc(S.auth.email)} · ${ROLES[S.session.role]}` : `${ROLES[S.session.role]}${S.session.person ? ' · ' + esc(S.session.person) : ''}`;
+  return `<header class="top"><div class="top-in">
+    <div class="brand">IPAK PMS 2025<small>Performance Assessment · Filmline</small></div>
+    <nav>${nav.map(([k, l]) => `<a href="#/${k}" class="${on === k ? 'on' : ''}">${l}</a>`).join('')}</nav>
+    <span class="chip" id="syncChip"></span><span class="chip">${who}</span>
+    ${Cloud.signedIn ? '<button class="btn sm" id="btnSync">Sync</button><button class="btn sm" id="btnOut">Sign out</button>' : ''}
+  </div></header><main>${banner()}${body}</main>`;
+}
+function banner() {
+  const c = Object.keys(S.conflicts);
+  if (!c.length) return '';
+  return `<div class="msg err"><b>Sync conflict:</b> someone else changed ${c.length} record(s) while you also edited them: ${c.map(esc).join(', ')}.
+    <div class="row" style="margin-top:6px"><button class="btn sm" data-act="takeCloud">Use cloud version (discard my changes)</button><button class="btn sm" data-act="forceMine">Overwrite cloud with mine</button></div></div>`;
+}
+
+function render() {
+  const app = $('#app');
+  if (Cloud.on && !Cloud.signedIn) { app.innerHTML = loginView(); updateChip(); bindLogin(); return; }
+  let body = '';
+  const v = route.name;
+  if (v === 'dashboard') body = dashboardView();
+  else if (v === 'employees') body = employeesView();
+  else if (v === 'emp') body = formView(route.arg);
+  else if (v === 'guidelines') body = guidelinesView();
+  else if (v === 'settings') body = settingsView();
+  else if (v === 'tests') body = testsView();
+  else body = dashboardView();
+  app.innerHTML = shell(body); updateChip();
+  if (v === 'emp') { const e = empById(route.arg); if (e && S.assessments[e.id]) refreshComputed(e, S.assessments[e.id]); }
+  if (v === 'employees') applyEmpFilters();
+}
+
+/* ================= LOGIN ================= */
+function loginView() {
+  return `<main style="max-width:420px;margin-top:8vh"><div class="card"><h1>IPAK PMS 2025</h1>
+  <p style="color:var(--mute)">Sign in with your company email.</p>
+  <label class="f">Email</label><input id="lgE" type="email" autocomplete="username">
+  <label class="f" style="margin-top:8px">Password</label><input id="lgP" type="password" autocomplete="current-password">
+  <div id="lgMsg"></div>
+  <div class="row" style="margin-top:12px"><button class="btn p" id="lgGo">Sign in</button><span class="sp"></span><button class="btn sm" id="lgLocal">Settings</button></div></div></main>`;
+}
+function bindLogin() {
+  const go_ = async () => {
+    $('#lgMsg').innerHTML = ''; $('#lgGo').disabled = true;
+    try { await Cloud.login($('#lgE').value.trim(), $('#lgP').value); await sync(true); route = { name: 'dashboard', arg: '', q: {} }; render(); }
+    catch (e) { $('#lgMsg').innerHTML = `<div class="msg err">${esc(e.message)}</div>`; $('#lgGo').disabled = false; }
+  };
+  $('#lgGo').onclick = go_; $('#lgP').onkeydown = ev => { if (ev.key === 'Enter') go_(); };
+  $('#lgLocal').onclick = () => { if (confirm('Disconnect cloud and use local mode on this browser?')) { S.cloud = { apiKey: '', projectId: '' }; S.auth = null; persist(); render(); } };
+}
+
+/* ================= DASHBOARD ================= */
+function dashboardView() {
+  const emps = visibleEmps();
+  const list = emps.map(e => ({ e, a: S.assessments[e.id] }));
+  const d = PMS.distribution(list.map(x => x.a)), n = list.length || 1;
+  const valid = list.filter(x => PMS.validate(x.a).ok).length;
+  const st = {}; Object.keys(STATUS).forEach(k => st[k] = list.filter(x => x.a.status === k).length);
+  const avg = list.length ? list.reduce((s, x) => s + PMS.final(x.a).ipi.points, 0) / list.length : 0;
+  const rows = ['A', 'B', 'C'], cols = ['C', 'B', 'A'];
+  const cls = c => ({ AA: 'bA dk', AB: 'bA dk', BA: 'bA dk', BB: 'bB', AC: 'bX', BC: 'bX', CA: 'bX', CB: 'bC', CC: 'bC' }[c]);
+  const nine = `<div class="nine">${rows.map(r => `<div class="ax">IPI ${r}</div>${cols.map(c => { const k = r + c; return `<div class="box ${cls(k)}" data-box="${k}"><b>${k[0]} ${k[1]}</b><small>${PMS.BOX[k]}</small><div class="n">${d[k]}</div><small>${(d[k] / n * 100).toFixed(0)}% actual · ${PMS.IDEAL[k]}% ideal</small></div>`; }).join('')}`).join('')}
+    <div></div>${cols.map(c => `<div class="axh">BPI ${c}</div>`).join('')}</div>`;
+  const bands = [['Low (CC, CB, CA)', ['CC', 'CB', 'CA'], 15], ['Core (BC, BB, AC)', ['BC', 'BB', 'AC'], 70], ['High (BA, AB, AA)', ['BA', 'AB', 'AA'], 15]];
+  const mx = Math.max(50, ...ORDER.map(k => d[k] / n * 100));
+  const bars = `<div class="bars">${ORDER.map(k => `<div class="c"><div class="p"><i class="i1" style="height:${PMS.IDEAL[k] / mx * 100}%" title="Ideal ${PMS.IDEAL[k]}%"></i><i class="i2" style="height:${d[k] / n * 100 / mx * 100}%" title="Actual ${(d[k] / n * 100).toFixed(1)}%"></i></div><b>${k}</b></div>`).join('')}</div>
+    <div class="row" style="font-size:12px;color:var(--mute)"><span><i style="display:inline-block;width:10px;height:10px;background:#cbd5d0"></i> Ideal curve</span><span><i style="display:inline-block;width:10px;height:10px;background:var(--g2)"></i> Actual</span></div>`;
+  return `<h1>Dashboard</h1>
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="kpi"><b>${list.length}</b><span>Employees</span></div>
+    <div class="kpi"><b>${valid}/${list.length}</b><span>Forms complete &amp; policy-valid</span></div>
+    <div class="kpi"><b>${st.lm_submitted}</b><span>Waiting for HOD</span></div>
+    <div class="kpi"><b>${st.hod_approved}</b><span>Waiting for HR</span></div>
+    <div class="kpi"><b>${st.hr_final}</b><span>Finalized</span></div>
+    <div class="kpi"><b>${avg.toFixed(1)}</b><span>Average IPI points</span></div>
+  </div>
+  <div class="grid g2">
+   <div class="card"><h2>9-Box Performance Model <small style="font-weight:400;color:var(--mute)">(click a box to see people)</small></h2>${nine}</div>
+   <div class="card"><h2>Actual vs Ideal Performance Curve</h2>${bars}
+     <table style="margin-top:10px"><tr><th>Band</th><th>Ideal</th><th>Actual</th></tr>${bands.map(([t, ks, id]) => { const c = ks.reduce((s, k) => s + d[k], 0); return `<tr><td>${t}</td><td>${id}%</td><td>${(c / n * 100).toFixed(1)}% (${c})</td></tr>`; }).join('')}</table>
+   </div></div>`;
+}
+
+/* ================= EMPLOYEES ================= */
+function employeesView() {
+  const emps = visibleEmps();
+  const sec = [...new Set(emps.map(e => e.section))].sort();
+  const q = route.q || {};
+  return `<div class="row"><h1 class="sp">Employees</h1>
+    ${(S.session.role === 'admin' || S.session.role === 'hr') ? '<button class="btn p" id="btnAddEmp">+ Add employee</button>' : ''}
+    <button class="btn" id="btnXls">Export Excel</button></div>
+  <div class="card"><div class="row" style="margin-bottom:10px">
+    <input id="fq" placeholder="Search name, ID, designation…" style="max-width:280px" value="${esc(q.s || '')}">
+    <select id="fst" style="max-width:210px"><option value="">All statuses</option>${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${q.st === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
+    <select id="fsec" style="max-width:170px"><option value="">All sections</option>${sec.map(s => `<option ${q.sec === s ? 'selected' : ''}>${esc(s)}</option>`).join('')}</select>
+    <select id="fbox" style="max-width:240px"><option value="">All 9-box results</option>${ORDER.slice().reverse().map(k => `<option value="${k}" ${q.box === k ? 'selected' : ''}>${k} – ${PMS.BOX[k]}</option>`).join('')}</select>
+    <span id="fcount" style="color:var(--mute)"></span></div>
+  <div class="tw"><table id="empTable"><thead><tr><th>ID</th><th>Name</th><th>Designation</th><th>Section</th><th>Grade</th><th>2024</th><th>IPI</th><th>BPI</th><th>Final</th><th>Status</th></tr></thead><tbody>
+  ${emps.map(e => { const a = S.assessments[e.id], f = PMS.final(a), ok = PMS.validate(a).ok;
+    return `<tr class="click" data-id="${e.id}" data-code="${f.code}" data-st="${a.status}" data-sec="${esc(e.section)}" data-txt="${esc((e.name + ' ' + e.id + ' ' + e.designation).toLowerCase())}">
+     <td>${e.id}</td><td><b>${esc(e.name)}</b>${ok ? '' : ' <span title="Form incomplete or violates policy" class="pill l0">incomplete</span>'}</td><td>${esc(e.designation)}</td><td>${esc(e.section)}</td><td>${esc(e.grade)}</td>
+     <td>${e.perf2024 != null ? (e.perf2024 * 100).toFixed(1) + '%' : 'N/A'}</td>
+     <td>${f.ipi.points.toFixed(2)} ${lvlPill(f.ipi.level)}</td><td>${f.bpi.developed}/6 ${lvlPill(f.bpi.level)}</td>
+     <td><b>${f.code[0]} ${f.code[1]}</b> <small style="color:var(--mute)">${f.label}</small></td><td>${statusPill(a.status)}</td></tr>`; }).join('')}
+  </tbody></table></div></div>`;
+}
+function applyEmpFilters() {
+  const q = ($('#fq')?.value || '').toLowerCase(), st = $('#fst')?.value, sec = $('#fsec')?.value, box = $('#fbox')?.value;
+  let n = 0;
+  $$('#empTable tbody tr').forEach(tr => {
+    const show = (!q || tr.dataset.txt.includes(q)) && (!st || tr.dataset.st === st) && (!sec || tr.dataset.sec === sec) && (!box || tr.dataset.code === box);
+    tr.style.display = show ? '' : 'none'; if (show) n++;
+  });
+  if ($('#fcount')) $('#fcount').textContent = n + ' shown';
+}
+
+/* ================= FORM ================= */
+function formView(id) {
+  const e = empById(id), a = e && S.assessments[e.id];
+  if (!e || !a) return '<div class="card">Employee not found. <a href="#/employees">Back</a></div>';
+  if (!can('view', e, a)) return '<div class="card">You do not have access to this form. <a href="#/employees">Back</a></div>';
+  const ed = can('edit', e, a), hodEd = can('hod', e, a), empEd = can('empComment', e, a);
+  const info = [['Employee ID', e.id], ['Grade', e.grade], ['Name', e.name], ['Line Manager', e.lineManager], ['Designation', e.designation], ['Head of Department', e.hod],
+    ['Department', e.department], ['Date of Joining', fmtDate(e.doj)], ['Sub Department', e.section], ['Performance Rating 2024', e.perf2024 != null ? (e.perf2024 * 100).toFixed(2) + '%' : 'N/A']];
+  const ro = ed ? '' : 'readonly';
+  const objRows = a.objectives.map((o, i) => `<tr>
+    <td><input data-p="objectives.${i}.text" value="${esc(o.text)}" ${ro} placeholder="SMART objective" style="min-width:220px"></td>
+    <td class="crit"><input data-p="objectives.${i}.a" value="${esc(o.a)}" ${ro}></td><td class="crit"><input data-p="objectives.${i}.b" value="${esc(o.b)}" ${ro}></td><td class="crit"><input data-p="objectives.${i}.c" value="${esc(o.c)}" ${ro}></td>
+    <td><input class="num" type="number" min="0" max="100" step="1" data-p="objectives.${i}.weight" value="${esc(o.weight)}" ${ro}></td>
+    <td><input class="num" data-p="objectives.${i}.achievement" value="${esc(o.achievement)}" ${ro}></td>
+    <td><input class="num" type="number" min="0" max="150" step="0.01" data-p="objectives.${i}.pct" value="${esc(o.pct)}" ${ro}></td>
+    <td id="lv${i}"></td>${ed ? `<td><button class="btn sm" data-act="delObj" data-i="${i}" title="Remove">✕</button></td>` : ''}</tr>`).join('');
+  const comps = COMP.map((c, i) => { const [t, ...rest] = c.title.split('\n\n'); return `<div class="comp"><div class="hd"><div class="t"><b>${esc(t)}</b>\n${esc(rest.join(' '))}</div>
+    <select data-p="bpi.${i}" ${ed ? '' : 'disabled'}><option value="">Select Rating</option><option ${a.bpi[i] === PMS.DEV ? 'selected' : ''}>${PMS.DEV}</option><option ${a.bpi[i] === PMS.NEED ? 'selected' : ''}>${PMS.NEED}</option></select></div>
+    <details><summary>Show behaviour indicators</summary><div class="ind"><div><b>Developed behaviour</b>\n${esc(c.developed)}</div><div><b>Needs improvement</b>\n${esc(c.needs)}</div></div></details></div>`; }).join('');
+  const sg = a.sign || {};
+  const signLine = (k, label) => `<div><span style="color:var(--mute)">${label}:</span> ${sg[k] ? `✔ ${esc(sg[k].by)} · ${fmtTime(sg[k].at)}` : '<i style="color:var(--mute)">pending</i>'}</div>`;
+  const wf = [];
+  if (can('edit', e, a)) wf.push('<button class="btn p" data-act="submit">Submit to HOD</button>');
+  if (can('hod', e, a)) wf.push('<button class="btn p" data-act="approve">Approve</button><button class="btn" data-act="return">Return to Line Manager</button>');
+  if (can('hr', e, a)) wf.push('<button class="btn p" data-act="finalize">Finalize (HR)</button>');
+  if (can('reopen', e, a)) wf.push('<button class="btn" data-act="reopen">Re-open as draft</button>');
+  return `<div class="row hide-print"><a href="#/employees" class="btn sm">← Employees</a><span class="sp"></span>${statusPill(a.status)}<button class="btn" data-act="print">Print / Save PDF</button></div>
+  <div class="card form" style="margin-top:12px">
+   <div class="pr-only" style="font-weight:800;color:var(--g1)">IPAK</div>
+   <h1 style="text-align:center;margin:0 0 4px">IPAK PERFORMANCE ASSESSMENT FORM - 2025</h1>
+   <h2 class="sec">EMPLOYEE INFORMATION</h2><div class="info">${info.map(([k, v]) => `<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>
+   <h2 class="sec">INDIVIDUAL PERFORMANCE INDICATOR - IPI</h2>
+   <div class="tw"><table class="obj"><thead><tr><th>SMART OBJECTIVE</th><th>A - EXCEED</th><th>B - MEET</th><th>C - BELOW</th><th>WEIGHTAGE %</th><th>ACHIEVEMENT</th><th>ACHIEVEMENT %</th><th>ACHIEVEMENT LEVEL</th>${ed ? '<th></th>' : ''}</tr></thead><tbody>${objRows}</tbody>
+   <tfoot><tr><td colspan="4" style="text-align:right"><b>Total weightage</b></td><td id="wTot"></td><td colspan="2" style="text-align:right"><b>IPI Total</b></td><td id="ipiPts"></td></tr>
+   <tr><td colspan="7" style="text-align:right"><b>IPI Final Rating</b></td><td id="ipiLvl"></td></tr></tfoot></table></div>
+   ${ed ? '<div class="hide-print" style="margin-top:6px"><button class="btn sm" data-act="addObj">+ Add objective</button> <small style="color:var(--mute)">Policy: 4–7 objectives, total 100%, max 30% per objective</small></div>' : ''}
+   <h2 class="sec">BEHAVIOUR PERFORMANCE INDICATOR - BPI</h2>${comps}
+   <div class="row"><b>BPI Total</b><span id="bpiPts"></span><span class="sp"></span><b>BPI Final Rating</b><span id="bpiLvl"></span></div>
+   <h2 class="sec">FINAL RATING</h2>
+   <div class="row" style="align-items:flex-start;gap:24px"><div><div id="finalTxt" style="margin-bottom:8px"></div><div id="finalGrid" class="mini"></div></div><div id="valBox" class="sp hide-print"></div></div>
+   <h2 class="sec">COMMENTS &amp; SIGN-OFF</h2>
+   <label class="f">Line Manager comments</label><textarea data-p="lmComment" ${ed ? '' : 'readonly'}>${esc(a.lmComment)}</textarea>
+   <label class="f" style="margin-top:8px">HOD comments</label><textarea data-p="hodComment" ${hodEd ? '' : 'readonly'}>${esc(a.hodComment)}</textarea>
+   <label class="f" style="margin-top:8px">Employee comments</label><textarea data-p="empComment" ${empEd ? '' : 'readonly'}>${esc(a.empComment)}</textarea>
+   <div class="row" style="margin-top:10px;gap:24px">${signLine('lm', 'Line Manager')}${signLine('hod', 'HOD')}${signLine('emp', 'Employee')}</div>
+   ${(S.session.role === 'admin' || S.session.role === 'hr') && (a.status === 'hod_approved' || a.status === 'hr_final') ? `<div class="hide-print" style="margin-top:6px"><button class="btn sm" data-act="empSign">Record employee acknowledgement (signed copy received)</button></div>` : ''}
+  </div>
+  <div class="card hide-print"><h2>Actions</h2><div class="row">${wf.join('') || '<span style="color:var(--mute)">No actions available to you at this stage.</span>'}</div>
+   <details style="margin-top:10px"><summary>Audit trail (${(a.log || []).length})</summary><table>${(a.log || []).slice().reverse().map(l => `<tr><td style="white-space:nowrap">${fmtTime(l.t)}</td><td>${esc(l.by)}</td><td>${esc(l.a)}</td></tr>`).join('')}</table></details></div>`;
+}
+function refreshComputed(e, a) {
+  const f = PMS.final(a), v = PMS.validate(a);
+  a.objectives.forEach((o, i) => { const el = $('#lv' + i); if (el) el.innerHTML = lvlFull(PMS.objLevel(o.pct)); });
+  const W = f.ipi.weight; $('#wTot').innerHTML = `<b style="color:${W === 100 ? 'var(--ok)' : 'var(--err)'}">${W}</b>`;
+  $('#ipiPts').innerHTML = `<b>${f.ipi.points.toFixed(2)}</b>`; $('#ipiLvl').innerHTML = lvlFull(f.ipi.level);
+  $('#bpiPts').innerHTML = `${f.bpi.score.toFixed(2)}% (${f.bpi.developed}/6 developed)`; $('#bpiLvl').innerHTML = lvlFull(f.bpi.level);
+  $('#finalTxt').innerHTML = `IPI <b>${f.ipi.level}</b> + BPI <b>${f.bpi.level}</b> = <b style="font-size:18px">${f.code[0]} ${f.code[1]}</b> · ${f.label}`;
+  const colr = c => ({ AA: '#548235', AB: '#548235', BA: '#548235', BB: '#a9d18e', AC: '#aec6e8', BC: '#aec6e8', CA: '#aec6e8', CB: '#f8cbad', CC: '#f8cbad' }[c]);
+  let g = '<div></div><div>BPI C</div><div>BPI B</div><div>BPI A</div>';
+  ['A', 'B', 'C'].forEach(r => { g += `<div style="padding-top:14px">IPI ${r}</div>`; ['C', 'B', 'A'].forEach(c => { const k = r + c; g += `<div style="background:${colr(k)};color:${['AA', 'AB', 'BA'].includes(k) ? '#fff' : '#111'};${k === f.code ? 'outline:3px solid #111;font-weight:800' : ''}">${k === f.code ? '★ ' : ''}${k[0]} ${k[1]}</div>`; }); });
+  $('#finalGrid').innerHTML = g;
+  $('#valBox').innerHTML = v.errors.map(x => `<div class="msg err">${esc(x)}</div>`).join('') + v.warnings.map(x => `<div class="msg warn">${esc(x)}</div>`).join('') + (v.ok ? '<div class="msg ok">Form is complete and follows the policy.</div>' : '');
+}
+
+/* ===== form events ===== */
+function setPath(obj, path, val) { const p = path.split('.'); let o = obj; for (let i = 0; i < p.length - 1; i++) o = o[p[i]]; o[p[p.length - 1]] = val; }
+let saveT;
+document.addEventListener('input', ev => {
+  const el = ev.target; if (!el.dataset || !el.dataset.p || route.name !== 'emp') return;
+  const e = empById(route.arg), a = e && S.assessments[e.id]; if (!a) return;
+  let v = el.value; if (/\.(weight|pct)$/.test(el.dataset.p)) v = v === '' ? '' : Number(v);
+  setPath(a, el.dataset.p, v); refreshComputed(e, a);
+  clearTimeout(saveT); saveT = setTimeout(() => mark('as:' + e.id), 700);
+});
+document.addEventListener('change', ev => { if (ev.target.dataset?.p && route.name === 'emp') { clearTimeout(saveT); const e = empById(route.arg); if (e) mark('as:' + e.id); } });
+
+function transition(e, a, to, text, signKey) {
+  const v = PMS.validate(a);
+  if (to === 'lm_submitted' && !v.ok) { alert('Cannot submit yet:\n\n• ' + v.errors.join('\n• ')); return; }
+  a.status = to; a.sign = a.sign || {};
+  if (signKey) a.sign[signKey] = { by: Cloud.signedIn ? S.auth.email : (S.session.person || ROLES[S.session.role]), at: now() };
+  audit(a, text); mark('as:' + e.id); renderKeep();
+}
+
+/* ================= GLOBAL CLICK HANDLER ================= */
+document.addEventListener('click', async ev => {
+  const t = ev.target.closest('[data-act],[data-box],tr.click,#btnSync,#btnOut,#btnAddEmp,#btnXls'); if (!t) return;
+  if (t.dataset.box) { go('#/employees?box=' + t.dataset.box); return; }
+  if (t.matches('tr.click')) { go('#/emp/' + t.dataset.id); return; }
+  if (t.id === 'btnSync') { await sync(true); toast(syncState === 'ok' ? 'Synced' : 'Sync problem: ' + lastErr); return; }
+  if (t.id === 'btnOut') { if (Object.keys(S.dirty).length && !confirm('You have unsynced changes. Sign out anyway?')) return; S.auth = null; persist(); render(); return; }
+  if (t.id === 'btnAddEmp') { empModal(); return; }
+  if (t.id === 'btnXls') { exportExcel(); return; }
+  const act = t.dataset.act;
+  if (act === 'takeCloud') { Object.keys(S.conflicts).forEach(k => { delete S.dirty[k]; delete S.ut[k]; }); S.conflicts = {}; await sync(true); toast('Cloud version loaded'); return; }
+  if (act === 'forceMine') { for (const k of Object.keys(S.conflicts)) { const [kk, id] = k.split(':'); try { await Cloud.put(kk === 'as' ? 'assessments' : 'employees', id, kk === 'as' ? S.assessments[id] : empById(id), true); delete S.dirty[k]; delete S.conflicts[k]; } catch (e) { toast(e.message); } } persist(); renderKeep(); return; }
+  if (route.name !== 'emp') return;
+  const e = empById(route.arg), a = e && S.assessments[e.id]; if (!a) return;
+  switch (act) {
+    case 'print': window.print(); break;
+    case 'addObj': if (a.objectives.length >= PMS.POLICY.maxObj) { alert('Maximum ' + PMS.POLICY.maxObj + ' objectives allowed.'); break; } a.objectives.push({ text: '', a: '', b: '', c: '', weight: 0, achievement: '', pct: '' }); mark('as:' + e.id); renderKeep(); break;
+    case 'delObj': if (a.objectives.length <= PMS.POLICY.minObj && !confirm('Policy requires at least ' + PMS.POLICY.minObj + ' objectives. Remove anyway?')) break; a.objectives.splice(Number(t.dataset.i), 1); mark('as:' + e.id); renderKeep(); break;
+    case 'submit': transition(e, a, 'lm_submitted', 'Submitted to HOD by Line Manager', 'lm'); break;
+    case 'approve': if (confirm('Approve this assessment?')) transition(e, a, 'hod_approved', 'Approved by HOD', 'hod'); break;
+    case 'return': { const r = prompt('Reason for returning to Line Manager:'); if (r === null) break; a.sign = {}; transition(e, a, 'draft', 'Returned to Line Manager by HOD: ' + (r || '(no reason given)')); break; }
+    case 'finalize': if (confirm('Finalize and lock this assessment?')) transition(e, a, 'hr_final', 'Finalized by HR'); break;
+    case 'reopen': { const r = prompt('Reason for re-opening:'); if (r === null) break; a.sign = {}; transition(e, a, 'draft', 'Re-opened: ' + (r || '(no reason given)')); break; }
+    case 'empSign': a.sign = a.sign || {}; a.sign.emp = { by: S.session.person || ROLES[S.session.role], at: now() }; audit(a, 'Employee acknowledgement recorded by HR'); mark('as:' + e.id); renderKeep(); break;
+  }
+});
+document.addEventListener('input', ev => { if (['fq'].includes(ev.target.id)) applyEmpFilters(); });
+document.addEventListener('change', ev => { if (['fst', 'fsec', 'fbox'].includes(ev.target.id)) applyEmpFilters(); });
+
+/* ================= EMPLOYEE MODAL ================= */
+function empModal() {
+  const f = [['id', 'Employee ID', 'number'], ['name', 'Full name'], ['designation', 'Designation'], ['location', 'Location'], ['geo', 'Geo (city)'], ['department', 'Department'], ['section', 'Section'], ['grade', 'Grade'], ['doj', 'Date of joining', 'date'], ['lineManager', 'Direct supervisor'], ['hod', 'HOD'], ['perf2024', '2024 performance (e.g. 0.88, blank = N/A)', 'number']];
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = `<div><h2>Add employee</h2><div class="grid g2" style="gap:8px">${f.map(([k, l, t]) => `<div><label class="f">${l}</label><input id="em_${k}" type="${t || 'text'}" ${t === 'number' ? 'step="any"' : ''}></div>`).join('')}</div><div id="emMsg"></div>
+  <div class="row" style="margin-top:12px"><span class="sp"></span><button class="btn" id="emX">Cancel</button><button class="btn p" id="emOk">Add</button></div></div>`;
+  document.body.appendChild(m);
+  $('#emX').onclick = () => m.remove();
+  $('#emOk').onclick = () => {
+    const e = {}; f.forEach(([k]) => e[k] = $('#em_' + k).value.trim());
+    if (!e.id || !e.name || !e.lineManager || !e.hod) { $('#emMsg').innerHTML = '<div class="msg err">ID, name, supervisor and HOD are required.</div>'; return; }
+    if (empById(e.id)) { $('#emMsg').innerHTML = '<div class="msg err">This Employee ID already exists.</div>'; return; }
+    e.id = Number(e.id); e.perf2024 = e.perf2024 === '' ? null : Number(e.perf2024); e._rev = 0;
+    S.employees.push(e); S.assessments[e.id] = blankAssessment(); mark('emp:' + e.id); mark('as:' + e.id); m.remove(); go('#/emp/' + e.id); toast('Employee added');
+  };
+}
+
+/* ================= EXPORT / IMPORT ================= */
+function exportRows() {
+  return S.employees.map((e, i) => { const a = S.assessments[e.id], f = PMS.final(a);
+    return { 'Sr. #': i + 1, 'Emp ID': e.id, 'Full Name': e.name, Designation: e.designation, Location: e.location, Geo: e.geo, Department: e.department, Section: e.section, Grade: e.grade, 'Date of Joining': e.doj, 'Direct Supervisor': e.lineManager, HOD: e.hod,
+      '2024 - Performance': e.perf2024 ?? 'N/A', 'IPI - 2025 (points)': f.ipi.points, 'IPI Rating': PMS.LEVELS[f.ipi.level], 'Short IPI': f.ipi.level, 'BPI - 2025 (%)': f.bpi.score, 'BPI Rating': PMS.LEVELS[f.bpi.level], 'Short BPI': f.bpi.level, 'Final Performance': f.code[0] + ' ' + f.code[1], '9-Box Label': f.label, Status: STATUS[a.status][0] }; });
+}
+function loadXlsx() { return new Promise((res, rej) => { if (window.XLSX) return res(); const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+function download(name, text, type) { const b = new Blob([text], { type }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); }
+async function exportExcel() {
+  const rows = exportRows(), objs = [];
+  S.employees.forEach(e => S.assessments[e.id].objectives.forEach((o, i) => objs.push({ 'Emp ID': e.id, Name: e.name, '#': i + 1, Objective: o.text, 'Weightage %': o.weight, Achievement: o.achievement, 'Achievement %': o.pct, Level: PMS.objLevel(o.pct) || '' })));
+  try { await loadXlsx(); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), 'IFL Summary'); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(objs), 'Objectives'); XLSX.writeFile(wb, 'PMS_2025_Export.xlsx'); }
+  catch (er) { const k = Object.keys(rows[0]); download('PMS_2025_Export.csv', [k.join(','), ...rows.map(r => k.map(c => '"' + String(r[c]).replace(/"/g, '""') + '"').join(','))].join('\n'), 'text/csv'); toast('Excel library unavailable offline – CSV downloaded instead'); }
+}
+
+/* ================= GUIDELINES ================= */
+function guidelinesView() {
+  return `<h1>Guidelines</h1><div class="grid g2"><div class="card"><h2>Individual Performance Indicators (IPI)</h2><ul>
+  <li>Minimum <b>4</b> and maximum <b>7</b> SMART objectives per employee.</li><li>Weightages must total <b>100%</b>; no single objective above <b>30%</b>.</li>
+  <li>Enter the Achievement % for each objective: <b>≥98% = A</b>, <b>≥80% = B</b>, below that = C.</li>
+  <li>Overall IPI points = Σ (weightage × achievement %): <b>≥98 = A</b>, <b>≥80 = B</b>, below 80 = C.</li></ul>
+  <h2>Behavioural Performance Indicators (BPI)</h2><ul><li>Rate all <b>6</b> competencies: Developed Behaviour / Need Improvement.</li><li><b>6 developed = A</b>, <b>4–5 = B</b>, <b>3 or fewer = C</b>.</li></ul></div>
+  <div class="card"><h2>Final rating – 9-Box model</h2><p>First letter = IPI, second letter = BPI.</p><table><tr><th>Code</th><th>Label</th><th>Ideal %</th></tr>${['AA', 'AB', 'AC', 'BA', 'BB', 'BC', 'CA', 'CB', 'CC'].map(k => `<tr><td><b>${k[0]} ${k[1]}</b></td><td>${PMS.BOX[k]}</td><td>${PMS.IDEAL[k]}%</td></tr>`).join('')}</table></div>
+  <div class="card"><h2>Review &amp; submission workflow</h2><ol><li><b>Line Manager</b> fills the form and submits to HOD.</li><li><b>HOD</b> reviews, adds comments and approves (or returns it).</li><li><b>HR</b> reviews and finalizes; the form is then locked.</li><li>Signed copies are collected; HR records the employee acknowledgement.</li></ol>
+  <p style="color:var(--mute)">Timeline: 24 Nov 2025 – 25 Dec 2025. Maintain confidentiality of all performance data.</p></div></div>`;
+}
+
+/* ================= SETTINGS ================= */
+const RULES = `rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    function signedIn() { return request.auth != null && request.auth.token.email != null; }
+    function role() { return get(/databases/$(db)/documents/users/$(request.auth.token.email)).data.role; }
+    match /users/{email} {
+      allow read: if signedIn() && (request.auth.token.email == email || role() == 'admin');
+      allow write: if signedIn() && role() == 'admin';
+    }
+    match /employees/{id} {
+      allow read: if signedIn();
+      allow write: if signedIn() && role() in ['admin','hr'];
+    }
+    match /assessments/{id} {
+      allow read: if signedIn();
+      allow write: if signedIn() && role() in ['admin','hr','lm','hod'];
+    }
+  }
+}`;
+function settingsView() {
+  const cloud = `<div class="card"><h2>Cloud database (Firebase)</h2>
+   <p style="color:var(--mute)">${Cloud.on ? 'Cloud is <b>enabled</b>.' : 'Right now data is saved <b>only in this browser</b> (local mode). Enter your Firebase details below to save to the cloud and share between users.'}</p>
+   <div class="grid g2" style="gap:8px"><div><label class="f">Web API key</label><input id="cfK" value="${esc(S.cloud.apiKey)}" placeholder="AIza…"></div><div><label class="f">Project ID</label><input id="cfP" value="${esc(S.cloud.projectId)}" placeholder="my-pms-project"></div></div>
+   <div class="row" style="margin-top:10px"><button class="btn p" id="cfSave">${Cloud.on ? 'Update' : 'Enable cloud'}</button>${Cloud.on ? '<button class="btn" id="cfOff">Disable cloud</button>' : ''}
+    ${Cloud.signedIn && S.session.role === 'admin' ? '<button class="btn" id="cfUp">Upload all local data to cloud (overwrite)</button>' : ''}</div>
+   <details style="margin-top:12px"><summary>Setup steps (10 minutes, one time)</summary><ol>
+    <li>Create a project at <b>console.firebase.google.com</b> → add a <b>Web app</b> → copy <code>apiKey</code> and <code>projectId</code>.</li>
+    <li><b>Build → Authentication</b> → enable <b>Email/Password</b> and add a user for each person.</li>
+    <li><b>Build → Firestore Database</b> → create database → <b>Rules</b> tab → paste the rules below → Publish.</li>
+    <li>In Firestore create collection <code>users</code>; for each person add a document whose <b>ID is their lower-case email</b> with string fields <code>role</code> (admin / hr / lm / hod) and <code>person</code> (exactly the name shown as Supervisor/HOD in the employee list, for lm/hod roles).</li>
+    <li>Enter the API key and project ID here, sign in as admin and press <b>Upload all local data to cloud</b>.</li>
+    <li>Authentication → Settings → <b>Authorized domains</b>: add the domain where you host this file.</li></ol>
+    <pre>${esc(RULES)}</pre><button class="btn sm" id="cfCopy">Copy rules</button></details></div>`;
+  const local = !Cloud.on ? `<div class="card"><h2>Local demo role</h2><p style="color:var(--mute)">In local mode you can try each role. (With cloud enabled the role comes from the user record.)</p>
+   <div class="row"><select id="rl" style="max-width:220px">${Object.entries(ROLES).map(([k, v]) => `<option value="${k}" ${S.session.role === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
+   <select id="rp" style="max-width:280px"><option value="">(no person)</option>${[...new Set([...people('lineManager'), ...people('hod')])].map(p => `<option ${S.session.person === p ? 'selected' : ''}>${esc(p)}</option>`).join('')}</select></div></div>` : '';
+  const data = `<div class="card"><h2>Data</h2><div class="row">
+   <button class="btn" id="dExp">Backup (JSON)</button><label class="btn">Restore backup<input type="file" id="dImp" accept=".json" style="display:none"></label>
+   ${(S.session.role === 'admin' || S.session.role === 'hr') ? '<button class="btn" id="dFin">Mark all as Finalized</button>' : ''}
+   ${S.session.role === 'admin' && !Cloud.on ? '<button class="btn d" id="dReset">Reset to Excel data</button>' : ''}</div></div>`;
+  return `<h1>Settings</h1>${local}${cloud}${data}`;
+}
+document.addEventListener('click', async ev => {
+  const id = ev.target.id; if (!id) return;
+  if (id === 'cfSave') { S.cloud.apiKey = $('#cfK').value.trim(); S.cloud.projectId = $('#cfP').value.trim(); S.auth = null; persist(); render(); toast('Cloud settings saved'); }
+  if (id === 'cfOff') { if (confirm('Disable cloud? Data on this browser stays.')) { S.cloud = { apiKey: '', projectId: '' }; S.auth = null; persist(); render(); } }
+  if (id === 'cfCopy') { navigator.clipboard?.writeText(RULES); toast('Rules copied'); }
+  if (id === 'cfUp') {
+    if (!confirm('This overwrites ALL employee and assessment records in the cloud with the data in this browser. Continue?')) return;
+    try { for (const e of S.employees) await Cloud.put('employees', e.id, e, true); for (const [k, a] of Object.entries(S.assessments)) await Cloud.put('assessments', k, a, true); S.dirty = {}; S.conflicts = {}; persist(); toast('Uploaded ' + S.employees.length + ' employees'); sync(true); }
+    catch (e) { alert('Upload failed: ' + e.message + (e.status === 403 ? '\nCheck your Firestore rules and that your user has role "admin".' : '')); }
+  }
+  if (id === 'dExp') download('PMS_2025_backup.json', JSON.stringify({ employees: S.employees, assessments: S.assessments }, null, 1), 'application/json');
+  if (id === 'dFin') { if (!confirm('Mark every form as Finalized?')) return; Object.entries(S.assessments).forEach(([k, a]) => { if (a.status !== 'hr_final') { a.status = 'hr_final'; audit(a, 'Bulk-finalized by ' + ROLES[S.session.role]); mark('as:' + k); } }); renderKeep(); }
+  if (id === 'dReset') { if (confirm('Reset ALL local data back to the imported Excel data? Your edits will be lost.')) { const c = S.cloud; S = seedState(); S.cloud = c; persist(); render(); toast('Reset done'); } }
+});
+document.addEventListener('change', ev => {
+  if (ev.target.id === 'rl') { S.session.role = ev.target.value; persist(); render(); }
+  if (ev.target.id === 'rp') { S.session.person = ev.target.value; persist(); render(); }
+  if (ev.target.id === 'dImp') {
+    const f = ev.target.files[0]; if (!f) return; const r = new FileReader();
+    r.onload = () => { try { const j = JSON.parse(r.result); if (!Array.isArray(j.employees) || !j.assessments) throw new Error('bad file'); if (!confirm('Replace current data with the backup?')) return; S.employees = j.employees; S.assessments = j.assessments; S.employees.forEach(e => { mark('emp:' + e.id); mark('as:' + e.id); }); persist(); render(); toast('Backup restored'); } catch (e) { alert('Invalid backup file.'); } };
+    r.readAsText(f);
   }
 });
 
-function login(){
-  const pin = document.getElementById('pinInput').value;
-  const err = document.getElementById('loginError');
-  if(!selectedRole){ err.textContent = "Please select a role."; return; }
-  if(pin !== CONFIG.PINS[selectedRole]){ err.textContent = "Incorrect PIN."; return; }
-  err.textContent = "";
-  currentRole = selectedRole;
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('appScreen').classList.remove('hidden');
-  document.getElementById('topTitle').textContent = "IPAK PMS — " + selectedRole.toUpperCase();
-  document.getElementById('commentsLabel').textContent =
-    (selectedRole==='employee' ? 'Employee Comments' : selectedRole==='manager' ? 'Line Manager Comments' : selectedRole==='hod' ? 'HOD Comments' : 'Comments');
-
-  if(currentRole === 'admin'){
-    document.getElementById('formBtn').classList.remove('hidden');
-    document.getElementById('dashBtn').classList.remove('hidden');
-    showDashboard();
-  } else {
-    buildObjectivesTable();
-    buildCompetencyTable();
-  }
-  checkScriptConfigured();
-  wireEmployeeIDAutoFill();
-}
-
-/* Runs auto-fill when the Employee ID field loses focus or Enter is pressed. */
-function wireEmployeeIDAutoFill(){
-  const input = document.getElementById('f_EmployeeID');
-  if(!input || input.dataset.wired) return;
-  input.dataset.wired = '1';
-  input.addEventListener('blur', autoFillEmployeeInfo);
-  input.addEventListener('keydown', e => {
-    if(e.key === 'Enter'){ e.preventDefault(); autoFillEmployeeInfo(); }
+/* ================= TESTS & AUDIT ================= */
+function runTests() {
+  const res = [], T = (name, ok, info) => res.push({ name, ok, info });
+  SEED.employees.forEach(e => {
+    const a = SEED.assessments[e.id], x = EXPECTED[e.id], f = PMS.final(a);
+    T(`#${e.id} ${e.name}: IPI points`, Math.abs(f.ipi.points - x.ipi) < 1e-9, `${f.ipi.points.toFixed(2)} vs Excel ${x.ipi.toFixed(2)}`);
+    T(`#${e.id}: IPI rating`, PMS.LEVELS[f.ipi.level] === x.ipiRating, f.ipi.level);
+    T(`#${e.id}: BPI rating`, PMS.LEVELS[f.bpi.level] === x.bpiRating, f.bpi.level);
+    T(`#${e.id}: Final (IFL col R)`, f.code[0] + ' ' + f.code[1] === x.final, f.code);
+    T(`#${e.id}: all ${a.objectives.length} objective levels`, a.objectives.every((o, i) => (PMS.objLevel(o.pct) ? PMS.LEVELS[PMS.objLevel(o.pct)] : null) === x.objRatings[i]), '');
   });
+  const mk = (ws, ps) => ws.map((w, i) => ({ text: 'x', weight: w, pct: ps[i] }));
+  T('Boundary: exactly 98.00 → A', PMS.ipi(mk([25, 25, 25, 25], [98, 98, 98, 98])).level === 'A', '');
+  T('Boundary: 97.99 → B', PMS.ipi(mk([100], [97.99])).level === 'B', '');
+  T('Boundary: exactly 80.00 → B', PMS.ipi(mk([100], [80])).level === 'B', '');
+  T('Excel gap 79.9–80 → C (Excel returned FALSE)', PMS.ipi(mk([100], [79.95])).level === 'C', '');
+  T('BPI 6 developed → A; 4 → B; 3 → C', PMS.bpi(Array(6).fill(PMS.DEV)).level === 'A' && PMS.bpi([PMS.DEV, PMS.DEV, PMS.DEV, PMS.DEV, PMS.NEED, PMS.NEED]).level === 'B' && PMS.bpi([PMS.DEV, PMS.DEV, PMS.DEV, PMS.NEED, PMS.NEED, PMS.NEED]).level === 'C', '');
+  T('Policy: fewer than 4 objectives rejected', !PMS.validate({ objectives: mk([40, 30, 30], [90, 90, 90]), bpi: Array(6).fill(PMS.DEV) }).ok, '');
+  T('Policy: >30% weight rejected', PMS.validate({ objectives: mk([35, 25, 20, 20], [90, 90, 90, 90]), bpi: Array(6).fill(PMS.DEV) }).errors.some(m => m.includes('30%')), '');
+  T('Policy: weights must total 100', PMS.validate({ objectives: mk([25, 25, 25, 20], [90, 90, 90, 90]), bpi: Array(6).fill(PMS.DEV) }).errors.some(m => m.includes('100')), '');
+  T('Policy: unrated BPI blocks submission', PMS.validate({ objectives: mk([25, 25, 25, 25], [90, 90, 90, 90]), bpi: ['', ...Array(5).fill(PMS.DEV)] }).errors.some(m => m.includes('BPI')), '');
+  return res;
+}
+function testsView() {
+  const r = runTests(), bad = r.filter(x => !x.ok).length;
+  const findings = [
+    ['Bug', 'Employee sheets L22 (IPI Final Rating)', 'Uses <code>N14&lt;=79.9</code> for C, so a total between 79.9 and 80 (e.g. 79.95) returns FALSE. Web app: anything below 80 = C.'],
+    ['Risk', 'L22 / L15:L21 floating-point', 'Totals such as 98.00000000000001 only work by luck; a total that lands at 97.99999999999999 would silently drop A to B. Web app uses exact integer math.'],
+    ['Risk', 'BPI Q26:Q31, L32', 'Six × 16.67% = 100.02% and the "B" cut-off 66.68% rely on rounding hacks. Web app counts developed behaviours (6 = A, 4–5 = B, ≤3 = C) – same results as Excel for all 18 employees.'],
+    ['Gap', 'Policy rules not enforced', 'Guidelines require 4–7 objectives, total 100% and max 30% per objective. The Excel only warns when the total is above 100 (I14) and never checks the rest. Web app enforces all of them before submission.'],
+    ['Gap', 'BPI unrated', 'Leaving a competency on "Select Rating" silently counts as Need Improvement. Web app requires all 6 to be rated.'],
+    ['Risk', 'VLOOKUP range IFL!$B$1:$M$19', 'Fixed to 19 rows – a new employee in row 20 breaks every sheet. Web app has no fixed range.'],
+    ['Risk', 'IFL AA3:AA5 GETPIVOTDATA', 'References only the combinations "B B", "B A", "A B". If any other combination appears (A A, C B …) the cell shows #REF!, and the pivot needs a manual refresh (macro). Web dashboard is live for all 9 boxes.'],
+    ['Cleanup', 'Hidden sheets "All" and "Mgr"', 'Point to an external workbook on D:\\ that no longer exists (broken links). Not needed in the web version.'],
+    ['Cleanup', 'Cells P36:P38 "BPI Logic"', 'Scratch calculations (=3*16.67) used by nothing.'],
+    ['Security', 'Macro RefreshPivot (only macro in the file)', 'Sheet password is hard-coded in plain text inside the VBA, and if the refresh errors the sheet stays unprotected. Not needed in the web version (no pivot).'],
+    ['Typos', 'Labels', '"WIEGHTAGE", "Perfromance", "OWNERSIP" – corrected in the web app.'],
+    ['Info', 'Excel has no 9-box labels', 'Only the star in the 3×3 grid. Web app also shows the label from the guideline (e.g. B B = Good Performer).']
+  ];
+  const col = { Bug: 'l0', Risk: 'lC', Gap: 'lC', Cleanup: 'lB', Security: 'lC', Typos: 'lB', Info: 'lB' };
+  return `<h1>Tests &amp; Excel audit</h1>
+  <div class="card"><h2>Formula parity test <span class="pill ${bad ? 'lC' : 'lA'}">${bad ? bad + ' failed' : 'all ' + r.length + ' passed'}</span></h2>
+   <p style="color:var(--mute)">The web calculations are checked live against the results stored in your Excel file for all ${SEED.employees.length} employees, plus boundary and policy tests.</p>
+   <div class="tw" style="max-height:340px"><table><tr><th>Test</th><th>Result</th><th>Detail</th></tr>${r.map(x => `<tr><td>${esc(x.name)}</td><td>${x.ok ? '✔' : '<b style="color:var(--err)">✘ FAIL</b>'}</td><td>${esc(x.info)}</td></tr>`).join('')}</table></div></div>
+  <div class="card"><h2>Findings in the Excel workbook</h2><table><tr><th>Type</th><th>Where</th><th>Issue</th></tr>${findings.map(f => `<tr><td><span class="pill ${col[f[0]]}">${f[0]}</span></td><td>${f[1]}</td><td>${f[2]}</td></tr>`).join('')}</table></div>`;
 }
 
-function logout(){
-  document.getElementById('appScreen').classList.add('hidden');
-  document.getElementById('loginScreen').classList.remove('hidden');
-  document.getElementById('pinInput').value = '';
-  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
-  selectedRole = null; currentRole = null;
-}
-
-function checkScriptConfigured(){
-  const note = document.getElementById('scriptNote');
-  if(CONFIG.SCRIPT_URL.includes('PASTE_YOUR')){
-    note.textContent = "⚠ Backend not connected yet: paste your deployed Apps Script URL into CONFIG.SCRIPT_URL in this file's code. Until then, Save/Load/Dashboard won't work.";
-  } else { note.classList.add('hidden'); }
-}
-
-/* ---------- form: objectives ---------- */
-function buildObjectivesTable(){
-  objectives = Array.from({length:7}, ()=>({name:'',weight:0,achv:0,level:''}));
-  renderObjectives();
-}
-function renderObjectives(){
-  const body = document.getElementById('objBody');
-  body.innerHTML = objectives.map((o,i)=>`
-    <tr>
-      <td><input value="${o.name}" onchange="objectives[${i}].name=this.value"></td>
-      <td><input type="number" min="0" max="100" value="${o.weight}" onchange="objectives[${i}].weight=+this.value;calc()"></td>
-      <td><input type="number" min="0" max="100" value="${o.achv}" onchange="objectives[${i}].achv=+this.value;calc()"></td>
-      <td>
-        <select onchange="objectives[${i}].level=this.value;calc()">
-          <option value="">Select</option>
-          <option value="A" ${o.level==='A'?'selected':''}>A - Exceed</option>
-          <option value="B" ${o.level==='B'?'selected':''}>B - Meet</option>
-          <option value="C" ${o.level==='C'?'selected':''}>C - Below</option>
-        </select>
-      </td>
-      <td id="objScore${i}">0.0</td>
-    </tr>`).join('');
-  calc();
-}
-
-/* ---------- form: competencies ---------- */
-function buildCompetencyTable(){
-  const body = document.getElementById('compBody');
-  body.innerHTML = COMPETENCIES.map((c,i)=>`
-    <tr>
-      <td>${c}</td>
-      <td>
-        <select id="comp${i}" onchange="calc()">
-          <option value="">Select Rating</option>
-          <option value="A">A - Exceed</option>
-          <option value="B">B - Meet</option>
-          <option value="C">C - Below</option>
-        </select>
-      </td>
-    </tr>`).join('');
-  calc();
-}
-
-/* ---------- scoring ----------
-   NOTE: exact scoring thresholds weren't fully readable from your
-   original file. This uses a reasonable default: weighted % score,
-   A >= 85, B 50–84.9, C < 50. Adjust LEVEL_SCORE / thresholds below
-   to match your official policy. */
-const LEVEL_SCORE = { A: 100, B: 70, C: 40 };
-
-function calc(){
-  let ipiTotal = 0, totalWeight = 0;
-  objectives.forEach((o,i)=>{
-    const score = (o.weight/100) * o.achv;
-    document.getElementById('objScore'+i).textContent = score.toFixed(1);
-    ipiTotal += score; totalWeight += o.weight;
-  });
-  document.getElementById('ipiTotalVal').textContent = ipiTotal.toFixed(1);
-  const ipiRating = ipiTotal >= 85 ? 'A - Exceed Expectation' : ipiTotal >= 50 ? 'B - Meet Expectation' : 'C - Below Expectation';
-  document.getElementById('ipiRatingVal').innerHTML = ratingPill(ipiRating);
-
-  let bpiSum = 0, bpiCount = 0;
-  COMPETENCIES.forEach((c,i)=>{
-    const sel = document.getElementById('comp'+i);
-    if(sel && sel.value){ bpiSum += LEVEL_SCORE[sel.value]; bpiCount++; }
-  });
-  const bpiTotal = bpiCount ? bpiSum/bpiCount : 0;
-  document.getElementById('bpiTotalVal').textContent = bpiTotal.toFixed(1);
-  const bpiRating = bpiCount===0 ? '—' : bpiTotal >= 85 ? 'A - Exceed Expectation' : bpiTotal >= 50 ? 'B - Meet Expectation' : 'C - Below Expectation';
-  document.getElementById('bpiRatingVal').innerHTML = bpiCount ? ratingPill(bpiRating) : '—';
-
-  const overall = (ipiTotal*0.6 + bpiTotal*0.4);
-  const overallRating = (ipiTotal===0 && bpiTotal===0) ? '—' :
-    overall >= 85 ? 'A - Exceed Expectation' : overall >= 50 ? 'B - Meet Expectation' : 'C - Below Expectation';
-  document.getElementById('finalRatingVal').innerHTML = (ipiTotal===0 && bpiTotal===0) ? '—' : ratingPill(overallRating);
-
-  return {ipiTotal, ipiRating, bpiTotal, bpiRating, overallRating};
-}
-function ratingPill(r){
-  const cls = r.startsWith('A') ? 'rA' : r.startsWith('B') ? 'rB' : r.startsWith('C') ? 'rC' : 'rN';
-  return `<span class="rating-pill ${cls}">${r}</span>`;
-}
-
-/* ---------- save / load ---------- */
-async function saveRecord(){
-  const msg = document.getElementById('saveMsg');
-  if(CONFIG.SCRIPT_URL.includes('PASTE_YOUR')){ msg.textContent='Backend not connected — see note above.'; msg.className='save-msg err'; return; }
-  const id = document.getElementById('f_EmployeeID').value.trim();
-  if(!id){ msg.textContent='Employee ID is required.'; msg.className='save-msg err'; return; }
-  const r = calc();
-  const compRatings = COMPETENCIES.map((c,i)=>({name:c, rating: document.getElementById('comp'+i).value}));
-  const payload = {
-    FormType: FORM_TYPE_MAP[currentRole] || 'Employee',
-    EmployeeID: id,
-    Name: document.getElementById('f_Name').value,
-    Designation: document.getElementById('f_Designation').value,
-    Department: document.getElementById('f_Department').value,
-    SubDepartment: document.getElementById('f_SubDepartment').value,
-    Grade: document.getElementById('f_Grade').value,
-    LineManager: document.getElementById('f_LineManager').value,
-    HOD: document.getElementById('f_HOD').value,
-    DOJ: document.getElementById('f_DOJ').value,
-    Rating2024: document.getElementById('f_Rating2024').value,
-    ObjectivesJSON: JSON.stringify(objectives),
-    IPITotal: r.ipiTotal.toFixed(1),
-    IPIRating: r.ipiRating,
-    CompetenciesJSON: JSON.stringify(compRatings),
-    BPITotal: r.bpiTotal.toFixed(1),
-    BPIRating: r.bpiRating,
-    FinalRating: r.overallRating,
-    Comments: document.getElementById('f_Comments').value,
-    SubmittedBy: currentRole
-  };
-  msg.textContent = 'Saving...'; msg.className='save-msg';
-  try{
-    const res = await fetch(CONFIG.SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify(payload)
-    });
-    let data = null;
-    try{ data = await res.json(); }catch(e){ /* backend didn't return JSON */ }
-    if(data && data.result === 'success'){
-      msg.textContent = 'Saved successfully.'; msg.className='save-msg ok';
-    } else if(data && data.error){
-      msg.textContent = 'Save failed (backend error): ' + data.error; msg.className='save-msg err';
-    } else if(!res.ok){
-      msg.textContent = 'Save failed: server returned HTTP ' + res.status; msg.className='save-msg err';
-    } else {
-      msg.textContent = 'Save request sent, but backend response was unclear — please verify the sheet.'; msg.className='save-msg err';
-    }
-  }catch(err){
-    msg.textContent = 'Save failed: ' + err.message; msg.className='save-msg err';
-  }
-}
-
-async function loadExisting(){
-  const msg = document.getElementById('saveMsg');
-  if(CONFIG.SCRIPT_URL.includes('PASTE_YOUR')){ msg.textContent='Backend not connected — see note above.'; msg.className='save-msg err'; return; }
-  const id = document.getElementById('f_EmployeeID').value.trim();
-  if(!id){ msg.textContent='Enter an Employee ID first.'; msg.className='save-msg err'; return; }
-  try{
-    const res = await fetch(`${CONFIG.SCRIPT_URL}?action=get&id=${encodeURIComponent(id)}&formType=${FORM_TYPE_MAP[currentRole]}`);
-    const data = await res.json();
-    if(!data.row){ msg.textContent='No existing record found.'; msg.className='save-msg err'; return; }
-    const row = data.row;
-    ['Name','Designation','Department','SubDepartment','Grade','LineManager','HOD','DOJ','Rating2024','Comments'].forEach(k=>{
-      document.getElementById('f_'+k).value = row[k] || '';
-    });
-    try{ objectives = JSON.parse(row.ObjectivesJSON) || objectives; }catch(e){}
-    renderObjectives();
-    try{
-      const comps = JSON.parse(row.CompetenciesJSON) || [];
-      comps.forEach((c,i)=>{ const sel=document.getElementById('comp'+i); if(sel) sel.value=c.rating||''; });
-    }catch(e){}
-    calc();
-    msg.textContent='Record loaded.'; msg.className='save-msg ok';
-  }catch(err){
-    msg.textContent='Load failed: '+err.message; msg.className='save-msg err';
-  }
-}
-
-/* ---------- dashboard (admin) ---------- */
-function showDashboard(){
-  document.getElementById('formView').classList.add('hidden');
-  document.getElementById('dashView').classList.remove('hidden');
-  loadDashboard();
-}
-function showForm(){
-  document.getElementById('dashView').classList.add('hidden');
-  document.getElementById('formView').classList.remove('hidden');
-  buildObjectivesTable(); buildCompetencyTable();
-}
-
-async function loadDashboard(){
-  if(CONFIG.SCRIPT_URL.includes('PASTE_YOUR')){
-    document.getElementById('statRow').innerHTML = '<div class="stat">Backend not connected yet — see CONFIG.SCRIPT_URL</div>';
-    return;
-  }
-  try{
-    const res = await fetch(`${CONFIG.SCRIPT_URL}?action=list`);
-    const data = await res.json();
-    const rows = data.rows || [];
-    renderStats(rows);
-    renderBars(rows);
-    renderTable(rows);
-  }catch(err){
-    document.getElementById('statRow').innerHTML = '<div class="stat">Failed to load: '+err.message+'</div>';
-  }
-}
-function renderStats(rows){
-  const employees = new Set(rows.map(r=>r.EmployeeID)).size;
-  const submitted = rows.filter(r=>r.FinalRating && r.FinalRating!=='—').length;
-  const aCount = rows.filter(r=>(r.FinalRating||'').startsWith('A')).length;
-  const cCount = rows.filter(r=>(r.FinalRating||'').startsWith('C')).length;
-  document.getElementById('statRow').innerHTML = `
-    <div class="stat"><div class="num">${employees}</div><div class="lbl">Employees</div></div>
-    <div class="stat"><div class="num">${submitted}</div><div class="lbl">Records Submitted</div></div>
-    <div class="stat"><div class="num">${aCount}</div><div class="lbl">Exceed Expectation</div></div>
-    <div class="stat"><div class="num">${cCount}</div><div class="lbl">Below Expectation</div></div>`;
-}
-function renderBars(rows){
-  const buckets = {A:0,B:0,C:0};
-  rows.forEach(r=>{ const l=(r.FinalRating||'')[0]; if(buckets[l]!==undefined) buckets[l]++; });
-  const max = Math.max(1, buckets.A, buckets.B, buckets.C);
-  const colors = {A:'var(--green)',B:'var(--amber)',C:'var(--red)'};
-  const labels = {A:'A - Exceed Expectation',B:'B - Meet Expectation',C:'C - Below Expectation'};
-  document.getElementById('ratingBars').innerHTML = ['A','B','C'].map(k=>`
-    <div class="bar-row">
-      <div style="width:170px">${labels[k]}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${(buckets[k]/max*100)}%;background:${colors[k]}"></div></div>
-      <div style="width:24px;text-align:right">${buckets[k]}</div>
-    </div>`).join('');
-}
-function renderTable(rows){
-  const cols = ['EmployeeID','Name','Department','FormType','IPIRating','BPIRating','FinalRating'];
-  let html = '<tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>';
-  rows.forEach(r=>{ html += '<tr>'+cols.map(c=>`<td>${r[c]||''}</td>`).join('')+'</tr>'; });
-  document.getElementById('dashTable').innerHTML = html || '<tr><td>No records yet</td></tr>';
-}
+/* ================= BOOT ================= */
+parseHash();
+render();
+if (Cloud.signedIn) sync(true);
+window.__PMS_APP = { S: () => S, render, go, sync };
+})();
 </script>
 </body>
 </html>
