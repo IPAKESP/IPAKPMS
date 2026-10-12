@@ -1,0 +1,1401 @@
+{
+ "emps": [
+  {
+   "id": 4,
+   "name": "Uzair Nawaz",
+   "desig": "Assistant Manager - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "MM-8",
+   "doj": "2016-05-01",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.8797777777777775
+  },
+  {
+   "id": 18,
+   "name": "Muhammad Furhad Rafiq",
+   "desig": "Manager - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "MM-5",
+   "doj": "2016-12-26",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.9348888888888888
+  },
+  {
+   "id": 106,
+   "name": "Muhammad Faisal Qureshi",
+   "desig": "Senior Assistant Manager - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "MM-7",
+   "doj": "2017-07-10",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.8966666666666667
+  },
+  {
+   "id": 205,
+   "name": "Shams Ul Haq",
+   "desig": "Senior Officer - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-4",
+   "doj": "2018-08-01",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.8526666666666668
+  },
+  {
+   "id": 290,
+   "name": "Muhammad Talha Javed",
+   "desig": "Assistant Manager - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "MM-8",
+   "doj": "2020-10-12",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.9068888888888889
+  },
+  {
+   "id": 302,
+   "name": "Bilal Asghar",
+   "desig": "Specialist - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-3",
+   "doj": "2020-12-01",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.8717777777777778
+  },
+  {
+   "id": 311,
+   "name": "Khurram Shahzad",
+   "desig": "Executive - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-2",
+   "doj": "2021-03-18",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.8877777777777777
+  },
+  {
+   "id": 337,
+   "name": "Muhammad Asghar Khan",
+   "desig": "Assistant Manager - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "MM-8",
+   "doj": "2022-02-01",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.9037777777777777
+  },
+  {
+   "id": 359,
+   "name": "Ali Rehman",
+   "desig": "Senior Officer - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-4",
+   "doj": "2021-01-21",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.9117777777777778
+  },
+  {
+   "id": 363,
+   "name": "Ahmar Allah Rakha",
+   "desig": "Senior Officer - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-4",
+   "doj": "2021-02-09",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.9117777777777778
+  },
+  {
+   "id": 368,
+   "name": "Gulfam Hadier",
+   "desig": "Officer II - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-6",
+   "doj": "2021-11-01",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.863777777777778
+  },
+  {
+   "id": 484,
+   "name": "Sadaqat Hussain",
+   "desig": "Officer I - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-5",
+   "doj": "2023-04-18",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.8797777777777775
+  },
+  {
+   "id": 808,
+   "name": "Muhammad Hannan Asif",
+   "desig": "Executive - Metalizer",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Metalizer",
+   "grade": "JM-2",
+   "doj": "2024-07-08",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.882888888888889
+  },
+  {
+   "id": 819,
+   "name": "Haseeb Naeem",
+   "desig": "Officer II - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-6",
+   "doj": "2024-07-22",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.8526666666666668
+  },
+  {
+   "id": 877,
+   "name": "Muhammad Zain Raza",
+   "desig": "Officer I - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-5",
+   "doj": "2024-09-23",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": 0.8255555555555556
+  },
+  {
+   "id": 941,
+   "name": "Muhammad Junaid",
+   "desig": "Executive - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-2",
+   "doj": "2025-01-13",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": null
+  },
+  {
+   "id": 1023,
+   "name": "Zain Ul Abiden",
+   "desig": "Officer II - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-6",
+   "doj": "2025-08-04",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": null
+  },
+  {
+   "id": 1027,
+   "name": "Karamat Ali",
+   "desig": "Officer I - Filmline",
+   "loc": "IPAK",
+   "geo": "Lahore",
+   "dept": "Filmline",
+   "section": "Filmline",
+   "grade": "JM-5",
+   "doj": "2025-08-11",
+   "sup": "Muhammad Abubakar",
+   "hod": "Muhammad Kamran Khan",
+   "perf24": null
+  }
+ ],
+ "forms": {
+  "4": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is ≤3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Daily Production Tracking (100% Production Target)",
+     "A": "≥ 102%",
+     "B": "100%",
+     "C": "< 100%",
+     "w": 20,
+     "ach": "100%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "82%",
+     "pct": 0.84
+    },
+    {
+     "obj": "Schedule Compliance (≥90%)",
+     "A": "95~100%",
+     "B": "90~95%",
+     "C": "< 90%",
+     "w": 15,
+     "ach": "92%",
+     "pct": 0.98
+    },
+    {
+     "obj": "BOM Usage Audit (≤5% Variance)",
+     "A": "< 5%",
+     "B": "5%",
+     "C": "> 5%",
+     "w": 15,
+     "ach": "<5%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure to deliver 1 trainings per month related to operations for capacity building",
+     "A": "2",
+     "B": "1",
+     "C": "0",
+     "w": 10,
+     "ach": "1",
+     "pct": 0.81
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Need Improvement",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Displays a responsible approach toward assigned duties and maintains acceptable work quality.",
+   "hod": "He has performed assigned duties in a satisfactory manner and meets the basic requirements of the role. Needs to improve proactive process control and troubleshooting skills. Should enhance shift planning, follow-up, and decision-making.",
+   "emp": ""
+  },
+  "18": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is ≤3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 15,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Achieve 100% Production Target",
+     "A": "≥ 100%",
+     "B": "100%",
+     "C": "< 100%",
+     "w": 20,
+     "ach": "100%",
+     "pct": 0.95
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": ">3%",
+     "pct": 0.85
+    },
+    {
+     "obj": "Ensure Production Schedule Adherence (≥90%)",
+     "A": "95~100%",
+     "B": "90~95%",
+     "C": "< 90%",
+     "w": 15,
+     "ach": "92%",
+     "pct": 0.95
+    },
+    {
+     "obj": "Adherence to BOM (≤5% Variance)",
+     "A": "< 5%",
+     "B": "5%",
+     "C": "> 5%",
+     "w": 15,
+     "ach": "5%",
+     "pct": 0.95
+    },
+    {
+     "obj": "Ensure OEE (≥88%)",
+     "A": ">88%",
+     "B": "88%",
+     "C": "< 88%",
+     "w": 15,
+     "ach": "< 88%",
+     "pct": 0.85
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour"
+   ],
+   "lm": "He has demonstrated good operational performance and technical competence in managing film line operations. He plays an important role in achieving production targets and maintaining process control. Should work on emotional control, listening skills, and constructive communication, especially during high-pressure situations. Leadership skills need further development, especially in people management, motivation, delegation, and conflict handling.",
+   "hod": "",
+   "emp": ""
+  },
+  "106": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is ≤3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Daily Production Tracking (100% Production Target)",
+     "A": "≥ 102%",
+     "B": "100%",
+     "C": "< 100%",
+     "w": 20,
+     "ach": "100%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "85%",
+     "pct": 0.84
+    },
+    {
+     "obj": "Schedule Compliance (≥90%)",
+     "A": "95~100%",
+     "B": "90~95%",
+     "C": "< 90%",
+     "w": 15,
+     "ach": "92%",
+     "pct": 0.99
+    },
+    {
+     "obj": "BOM Usage Audit (≤5% Variance)",
+     "A": "< 5%",
+     "B": "5%",
+     "C": "> 5%",
+     "w": 15,
+     "ach": "<5%",
+     "pct": 0.82
+    },
+    {
+     "obj": "Ensure to deliver 1 trainings per month related to operations for capacity building",
+     "A": "2",
+     "B": "1",
+     "C": "0",
+     "w": 10,
+     "ach": "1",
+     "pct": 0.83
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Need Improvement",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Handles routine responsibilities efficiently and supports smooth departmental operations.",
+   "hod": "He has performed assigned duties in a satisfactory manner and meets the basic requirements of the role. Needs to improve proactive process control and troubleshooting skills. Should enhance shift planning, follow-up, and decision-making.",
+   "emp": ""
+  },
+  "205": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.83
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "0.86",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "0.84",
+     "pct": 0.86
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour"
+   ],
+   "lm": "Shows improvement compared to previous assessment period and continues to develop skills.",
+   "hod": "He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.",
+   "emp": ""
+  },
+  "290": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is ≤3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Daily Production Tracking (100% Production Target)",
+     "A": "≥ 102%",
+     "B": "100%",
+     "C": "< 100%",
+     "w": 20,
+     "ach": "100%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "84%",
+     "pct": 0.83
+    },
+    {
+     "obj": "Schedule Compliance (≥90%)",
+     "A": "95~100%",
+     "B": "90~95%",
+     "C": "< 90%",
+     "w": 15,
+     "ach": "91%",
+     "pct": 0.98
+    },
+    {
+     "obj": "BOM Usage Audit (≤5% Variance)",
+     "A": "< 5%",
+     "B": "5%",
+     "C": "> 5%",
+     "w": 15,
+     "ach": "<5%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure to deliver 1 trainings per month related to operations for capacity building",
+     "A": "2",
+     "B": "1",
+     "C": "0",
+     "w": 10,
+     "ach": "1",
+     "pct": 0.81
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour"
+   ],
+   "lm": "Shows good understanding of work processes and follows standard operating procedures effectively.",
+   "hod": "He has demonstrated very good operational control and responsibility in managing shift activities. He plays an important role in maintaining line stability, production continuity, and shop-floor discipline.",
+   "emp": ""
+  },
+  "302": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.98
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "84%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "87%",
+     "pct": 0.96
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Maintains good coordination with supervisors/Incharges and team members.",
+   "hod": "He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.",
+   "emp": ""
+  },
+  "311": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 0.99
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5 min",
+     "pct": 0.83
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "85%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "83%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "80%",
+     "pct": 0.8
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Demonstrates sound technical capability and effective execution of responsibilities.",
+   "hod": "He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.",
+   "emp": ""
+  },
+  "337": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is ≤3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Daily Production Tracking (100% Production Target)",
+     "A": "≥ 102%",
+     "B": "100%",
+     "C": "< 100%",
+     "w": 20,
+     "ach": ">100%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "85%",
+     "pct": 0.85
+    },
+    {
+     "obj": "Schedule Compliance (≥90%)",
+     "A": "95~100%",
+     "B": "90~95%",
+     "C": "< 90%",
+     "w": 15,
+     "ach": "96%",
+     "pct": 0.98
+    },
+    {
+     "obj": "BOM Usage Audit (≤5% Variance)",
+     "A": "< 5%",
+     "B": "0.05",
+     "C": "> 5%",
+     "w": 15,
+     "ach": "98%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure to deliver 1 trainings per month related to operations for capacity building",
+     "A": "2",
+     "B": "1",
+     "C": "0",
+     "w": 10,
+     "ach": "1",
+     "pct": 0.83
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour"
+   ],
+   "lm": "Shows exceptional commitment, technical competence, and a proactive approach to problem-solving. A valuable contributor to team success.",
+   "hod": "He has delivered very good and consistent performance. His strong SAP skills combined with solid operational control make him a valuable and reliable contributor to BOPP operations, with strong potential for expanded responsibility.",
+   "emp": ""
+  },
+  "359": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 1
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.98
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "3%",
+     "pct": 0.95
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "96%",
+     "pct": 0.98
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour"
+   ],
+   "lm": "Maintains consistent performance and meets targets within defined timelines.",
+   "hod": "He has delivered very good and consistent performance. His technical skills, quality awareness, and disciplined approach make him a valuable member of the BOPP production team, with strong potential for further growth.",
+   "emp": ""
+  },
+  "363": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.96
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "84%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "87%",
+     "pct": 0.89
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour"
+   ],
+   "lm": "Shows reliability in daily operations and adheres to workplace policies.",
+   "hod": "He has delivered very good and consistent performance. His technical skills, quality awareness, and disciplined approach make him a valuable member of the BOPP production team, with strong potential for further growth.",
+   "emp": ""
+  },
+  "368": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 1
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.83
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "86%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "84%",
+     "pct": 0.86
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Shows improvement compared to previous assessment period and continues to develop skills.",
+   "hod": "He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.",
+   "emp": ""
+  },
+  "484": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 0.99
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.83
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "84%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "83%",
+     "pct": 0.88
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Maintains a calm and positive attitude even during challenging situations and shows mutual respect toward supervisors and coworkers.",
+   "hod": "He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.",
+   "emp": ""
+  },
+  "808": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 15,
+     "ach": "<3.2",
+     "pct": 0.99
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "86%",
+     "pct": 1
+    },
+    {
+     "obj": "Ensure data logging and analysis on daily basis along with report making\n1. Incident Report\n2. Plant Checklist\n3. Plant Health Report",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "88%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct all audits and facilitate in documentations",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 15,
+     "ach": "100%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Preventive Maintenance is done as per plan along with analysis & report",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 15,
+     "ach": "86%",
+     "pct": 1
+    },
+    {
+     "obj": "Identify and implement process improvements in a year",
+     "A": "≥ 3",
+     "B": "2",
+     "C": "≤ 2",
+     "w": 15,
+     "ach": "87%",
+     "pct": 0.98
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Shows exceptional commitment, technical competence, and a proactive approach to problem-solving. A valuable contributor to team success.",
+   "hod": "He has delivered exceptional performance, demonstrating strong technical expertise, decisive leadership, and full ownership of shift operations. His contribution has been instrumental in achieving line stability, productivity improvement, quality consistency, and operational discipline. He is strongly recommended for recognition, expanded responsibility, and career advancement.",
+   "emp": ""
+  },
+  "819": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.86
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.88
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "84%",
+     "pct": 0.81
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "87%",
+     "pct": 0.8
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Need Improvement",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Shows willingness to work but requires closer supervision to maintain performance standards.",
+   "hod": "He has performed assigned duties in a satisfactory manner; however, there is a need to improve ownership and sense of responsibility in day-to-day operations. Also needs to improve process understanding and machine handling skills.",
+   "emp": ""
+  },
+  "877": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.84
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "83%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "86%",
+     "pct": 0.98
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Demonstrates good discipline and punctuality with a professional work attitude.",
+   "hod": "He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.",
+   "emp": ""
+  },
+  "941": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 15,
+     "ach": "<3.2",
+     "pct": 0.98
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "86%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure data logging and analysis on daily basis along with report making\n1. Incident Report\n2. Plant Checklist\n3. Plant Health Report",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "86%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct all audits and facilitate in documentations",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 15,
+     "ach": "98%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Preventive Maintenance is done as per plan along with analysis & report",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 15,
+     "ach": "86%",
+     "pct": 0.86
+    },
+    {
+     "obj": "Identify and implement process improvements in a year",
+     "A": "≥ 3",
+     "B": "2",
+     "C": "≤ 2",
+     "w": 15,
+     "ach": "87%",
+     "pct": 0.98
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Shows good understanding of work processes and follows standard operating procedures effectively.",
+   "hod": "He has demonstrated good performance and technical competence in managing process control and supporting stable BOPP line operations. Shows willingness to learn advanced process techniques and new grades. Responds positively to feedback and continuous improvement initiatives.",
+   "emp": ""
+  },
+  "1023": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "As per sop",
+     "pct": 0.87
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "85%",
+     "pct": 0.86
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "87%",
+     "pct": 0.85
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Demonstrates good discipline and punctuality with a professional work attitude.",
+   "hod": "He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.",
+   "emp": ""
+  },
+  "1027": {
+   "objs": [
+    {
+     "obj": "Ensure that LTIF is <=3.2",
+     "A": "<3.2",
+     "B": "3.2",
+     "C": ">3.2",
+     "w": 20,
+     "ach": "<3.2",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure to recover from film break during production as per set target time",
+     "A": "<6.5 min",
+     "B": "6.5min",
+     "C": ">6.5 min",
+     "w": 20,
+     "ach": "<6.5m",
+     "pct": 0.98
+    },
+    {
+     "obj": "Ensure that Screen change/filter change is done as per SOP",
+     "A": "",
+     "B": "As per SOP",
+     "C": "",
+     "w": 20,
+     "ach": "86%",
+     "pct": 0.86
+    },
+    {
+     "obj": "Overall Waste Control",
+     "A": "<3%",
+     "B": "3%",
+     "C": ">3%",
+     "w": 20,
+     "ach": "86%",
+     "pct": 0.98
+    },
+    {
+     "obj": "Conduct machine/quality checks as per the checklist",
+     "A": "100%",
+     "B": "95~99.9%",
+     "C": "<95%",
+     "w": 20,
+     "ach": "88%",
+     "pct": 0.86
+    }
+   ],
+   "bpi": [
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Developed Behaviour",
+    "Need Improvement"
+   ],
+   "lm": "Demonstrates willingness to take on additional responsibilities when required. Also displays a responsible and positive attitude toward assigned duties.",
+   "hod": "He has demonstrated good performance and reliability in operating the BOPP line. He supports stable production while maintaining quality, safety, and discipline.",
+   "emp": ""
+  }
+ }
+}
